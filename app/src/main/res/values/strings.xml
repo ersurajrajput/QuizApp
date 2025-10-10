@@ -1,0 +1,100 @@
+<resources>
+    <string name="app_name">Quiz App</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="title_activity_on_boarding">OnBoardingActivity</string>
+    <string name="title_activity_admin_login">AdminLoginActivity</string>
+    <string name="title_activity_student_home">StudentHomeActivity</string>
+    <string name="title_activity_activities">ActivitiesActivity</string>
+    <string name="title_activity_games">GamesActivity</string>
+    <string name="title_activity_dictionary">DictionaryActivity</string>
+    <string name="title_activity_diagram">DiagramActivity</string>
+    <string name="title_activity_game_seletor">GameSeletorActivity</string>
+    <string name="title_activity_arrow_game">ArrowGameActivity</string>
+    <string name="title_activity_game_type_selector">GameTypeSelectorActivity</string>
+    <string name="title_activity_game_selector">GameSelectorActivity</string>
+    <string name="title_activity_admin_home">AdminHomeActivity</string>
+    <string name="title_activity_staff">StaffActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_games_management">GamesManagementActivity</string>
+    <string name="title_activity_add_game">AddGameActivity</string>
+    <string name="title_activity_diagram_seletor">DiagramSeletorActivity</string>
+    <string name="title_activity_diagram_player">DiagramPlayerActivity</string>
+    <string name="title_activity_diagram_management">DiagramManagementActivity</string>
+    <string name="title_activity_dictionary_management">DictionaryManagementActivity</string>
+    <string name="title_activity_dictionary_selector">DictionarySelectorActivity</string>
+    <string name="title_activity_dictionary_seletor">DictionarySeletorActivity</string>
+    <string name="title_activity_player_dictonary">PlayerDictonaryActivity</string>
+    <string name="title_activity_dictonary_management">DictonaryManagementActivity</string>
+    <string name="title_activity_add_new_dictionary">AddNewDictionaryActivity</string>
+    <string name="title_activity_selector">ActivitySelectorActivity</string>
+    <string name="title_activity_activitys_managemant">ActivitysManagemantActivity</string>
+    <string name="title_activity_mcqmanagement">MCQActivityManagementActivity</string>
+    <string name="title_activity_management">managementActivity</string>
+    <string name="title_activity_add_new_mcqactivity">AddNewMCQActivity</string>
+    <string name="title_activity_true_false_management">TrueFalseManagementActivity</string>
+    <string name="title_activity_add_new_true_false_activity">AddNewTrueFalseActivityActivity
+    </string>
+    <string name="title_activity_image_mcq_management">ImageMcqManagementActivity</string>
+    <string name="title_activity_add_new_image_mcq">AddNewImageMcqActivity</string>
+    <string name="title_activity_custome_add">CustomeActivityAddActivity</string>
+    <string name="title_activity_fill_in_the_blacnks_management">
+        FillInTheBlacnksActivityManagementActivity
+    </string>
+    <string name="title_activity_fill_in_the_blanks_management">
+        FillInTheBlanksActivityManagementActivity
+    </string>
+    <string name="title_activity_add_new_fill_in_the_blanks">AddNewFillInTheBlanksActivity</string>
+    <string name="title_activity_match_the_following_management">
+        MatchTheFollowingActivityManagementActivity
+    </string>
+    <string name="title_activity_add_new_match_the_following">AddNewMatchTheFollowingActivity
+    </string>
+    <string name="title_activity_match_the_following_image_management">
+        MatchTheFollowingImageActivityManagementActivity
+    </string>
+    <string name="title_activity_add_new_match_the_following_image">
+        AddNewMatchTheFollowingImageActivity
+    </string>
+    <string name="title_activity_match_the_following_image_and_text_managemet">
+        MatchTheFollowingImageAndTextActivityManagemetActivity
+    </string>
+    <string name="title_activity_add_new_match_the_following_image_and_text">
+        AddNewMatchTheFollowingImageAndTextActivity
+    </string>
+    <string name="title_activity_drag_and_drop_management">DragAndDropActivityManagementActivity
+    </string>
+    <string name="title_activity_add_new_drag_and_drop">AddNewDragAndDropActivity</string>
+    <string name="title_activity_student">StudentActivity</string>
+    <string name="title_activity_mcqselector">MCQActivitySelectorActivity</string>
+    <string name="title_activity_mcqimage_based_selector">MCQImageBasedActivitySelectorActivity
+    </string>
+    <string name="title_activity_true_false_selector">TrueFalseActivitySelectorActivity</string>
+    <string name="title_activity_fill_in_the_blanks_selector">
+        FillInTheBlanksActivitySelectorActivity
+    </string>
+    <string name="title_activity_match_the_following_selector">
+        MatchTheFollowingActivitySelectorActivity
+    </string>
+    <string name="title_activity_match_the_following_image_based_selector">
+        MatchTheFollowingImageBasedActivitySelectorActivity
+    </string>
+    <string name="title_activity_match_the_following_text_and_image_selector">
+        MatchTheFollowingTextAndImageActivitySelectorActivity
+    </string>
+    <string name="title_activity_drag_and_drop_selector">DragAndDropActivitySelectorActivity
+    </string>
+    <string name="title_activity_mcqplayer">MCQPlayerActivity</string>
+    <string name="title_activity_mcqimage_player">MCQImagePlayerActivity</string>
+    <string name="title_activity_drag_and_drop_player">DragAndDropPlayerActivity</string>
+    <string name="title_activity_fill_in_the_blanks_player">FillInTheBlanksPlayerActivity</string>
+    <string name="title_activity_match_the_following_player">MatchTheFollowingPlayerActivity
+    </string>
+    <string name="title_activity_match_the_following_image_player">
+        MatchTheFollowingImagePlayerActivity
+    </string>
+    <string name="title_activity_match_the_following_text_image_player">
+        MatchTheFollowingTextImagePlayerActivity
+    </string>
+    <string name="title_activity_true_false_player">TrueFalsePlayerActivity</string>
+    <string name="title_activity_arrow_game_selector">ArrowGameSelectorActivity</string>
+</resources>

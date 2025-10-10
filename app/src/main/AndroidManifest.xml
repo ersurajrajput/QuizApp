@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" /> <!-- For Android 14+ (Selected Photos Access) -->
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+
+    <application
+        android:name=".MyApp"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.QuizApp" >
+
+        <activity
+            android:name=".screens.student.activity.studentplayer.FillIntheBlankActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.QuizAppTheme" />
+        <activity
+            android:name=".screens.student.activity.studentplayer.MCQImageActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.QuizAppTheme" />
+        <activity
+            android:name=".screens.student.activity.studentplayer.MCQActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.QuizAppTheme" >
+        </activity>
+        <activity
+            android:name=".screens.student.activity.studentplayer.TrueFalseActivity"
+            android:exported="true"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.QuizAppTheme" />
+        <activity
+            android:name=".screens.student.activity.player.MatchTheFollowingTextImagePlayerActivity"
+            android:exported="false"
+            android:label="@string/title_activity_match_the_following_text_image_player"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.student.activity.player.MatchTheFollowingImagePlayerActivity"
+            android:exported="false"
+            android:label="@string/title_activity_match_the_following_image_player"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.student.activity.player.MatchTheFollowingPlayerActivity"
+            android:exported="false"
+            android:label="@string/title_activity_match_the_following_player"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.student.activity.player.DragAndDropPlayerActivity"
+            android:exported="false"
+            android:label="@string/title_activity_drag_and_drop_player"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.student.activity.DragAndDropActivitySelectorActivity"
+            android:exported="false"
+            android:label="@string/title_activity_drag_and_drop_selector"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.student.activity.MatchTheFollowingTextAndImageActivitySelectorActivity"
+            android:exported="false"
+            android:label="@string/title_activity_match_the_following_text_and_image_selector"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.student.activity.MatchTheFollowingImageBasedActivitySelectorActivity"
+            android:exported="false"
+            android:label="@string/title_activity_match_the_following_image_based_selector"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.student.activity.MatchTheFollowingActivitySelectorActivity"
+            android:exported="false"
+            android:label="@string/title_activity_match_the_following_selector"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.student.activity.FillInTheBlanksActivitySelectorActivity"
+            android:exported="false"
+            android:label="@string/title_activity_fill_in_the_blanks_selector"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.student.activity.TrueFalseActivitySelectorActivity"
+            android:exported="false"
+            android:label="@string/title_activity_true_false_selector"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.student.activity.MCQImageBasedActivitySelectorActivity"
+            android:exported="false"
+            android:label="@string/title_activity_mcqimage_based_selector"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.student.activity.MCQActivitySelectorActivity"
+            android:exported="false"
+            android:label="@string/title_activity_mcqselector"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.student.StudentActivity"
+            android:exported="false"
+            android:label="@string/title_activity_student"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.activity.AddNewDragAndDropActivity"
+            android:exported="false"
+            android:label="@string/title_activity_add_new_drag_and_drop"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.activity.DragAndDropActivityManagementActivity"
+            android:exported="false"
+            android:label="@string/title_activity_drag_and_drop_management"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.activity.AddNewMatchTheFollowingImageAndTextActivity"
+            android:exported="false"
+            android:label="@string/title_activity_add_new_match_the_following_image_and_text"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.activity.MatchTheFollowingImageAndTextActivityManagemetActivity"
+            android:exported="false"
+            android:label="@string/title_activity_match_the_following_image_and_text_managemet"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.activity.AddNewMatchTheFollowingImageActivity"
+            android:exported="false"
+            android:label="@string/title_activity_add_new_match_the_following_image"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.activity.MatchTheFollowingImageActivityManagementActivity"
+            android:exported="false"
+            android:label="@string/title_activity_match_the_following_image_management"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.activity.AddNewMatchTheFollowingActivity"
+            android:exported="false"
+            android:label="@string/title_activity_add_new_match_the_following"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.activity.MatchTheFollowingActivityManagementActivity"
+            android:exported="false"
+            android:label="@string/title_activity_match_the_following_management"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.activity.AddNewFillInTheBlanksActivity"
+            android:exported="false"
+            android:label="@string/title_activity_add_new_fill_in_the_blanks"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.activity.FillInTheBlanksActivityManagementActivity"
+            android:exported="false"
+            android:label="@string/title_activity_fill_in_the_blanks_management"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.CustomeActivityAddActivity"
+            android:exported="false"
+            android:label="@string/title_activity_custome_add"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.activity.AddNewImageMcqActivity"
+            android:exported="false"
+            android:label="@string/title_activity_add_new_image_mcq"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.activity.ImageMcqManagementActivity"
+            android:exported="false"
+            android:label="@string/title_activity_image_mcq_management"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.activity.AddNewTrueFalseActivityActivity"
+            android:exported="false"
+            android:label="@string/title_activity_add_new_true_false_activity"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.activity.TrueFalseActivityManagementActivity"
+            android:exported="false"
+            android:label="@string/title_activity_true_false_management"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.activity.AddNewMCQActivity"
+            android:exported="false"
+            android:label="@string/title_activity_add_new_mcqactivity"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.activity.MCQActivityManagementActivity"
+            android:exported="false"
+            android:label="@string/title_activity_mcqmanagement"
+            android:theme="@style/Theme.QuizApp" /> <!-- <activity -->
+        <!-- android:name=".screens.admin.activity.managementActivity" -->
+        <!-- android:exported="false" -->
+        <!-- android:label="@string/title_activity_management" -->
+        <!-- android:theme="@style/Theme.QuizApp" /> -->
+        <!-- <activity -->
+        <!-- android:name=".screens.admin.activitys.MCQActivityManagementActivity" -->
+        <!-- android:exported="false" -->
+        <!-- android:label="@string/title_activity_mcqmanagement" -->
+        <!-- android:theme="@style/Theme.QuizApp" /> -->
+        <activity
+            android:name=".screens.admin.ActivitysManagemantActivity"
+            android:exported="true"
+            android:label="@string/title_activity_activitys_managemant"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.ui.theme.ActivitySelectorActivity"
+            android:exported="false"
+            android:label="@string/title_activity_selector"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.AddNewDictionaryActivity"
+            android:exported="false"
+            android:label="@string/title_activity_add_new_dictionary"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.DictonaryManagementActivity"
+            android:exported="false"
+            android:label="@string/title_activity_dictonary_management"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.student.dictionary.PlayerDictonaryActivity"
+            android:exported="false"
+            android:label="@string/title_activity_player_dictonary"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.student.dictionary.DictionaryPlayerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.student.dictionary.DictionarySelectorActivity"
+            android:exported="false"
+            android:label="@string/title_activity_dictionary_selector"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.DictionaryManagementActivity"
+            android:exported="false"
+            android:label="@string/title_activity_dictionary_management"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.DiagramManagementActivity"
+            android:exported="false"
+            android:label="@string/title_activity_diagram_management"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.student.diagrams.DiagramPlayerActivity"
+            android:exported="false"
+            android:label="@string/title_activity_diagram_player"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.student.diagrams.DiagramSelectorActivity"
+            android:exported="false"
+            android:label="@string/title_activity_diagram_seletor"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.AddGameActivity"
+            android:exported="false"
+            android:label="@string/title_activity_add_game"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.GamesManagementActivity"
+            android:exported="false"
+            android:label="@string/title_activity_games_management"
+            android:theme="@style/Theme.QuizApp" /> <!-- <activity -->
+        <!-- android:name=".screens.admin.SettingsActivity" -->
+        <!-- android:exported="false" -->
+        <!-- android:label="@string/title_activity_settings" -->
+        <!-- android:theme="@style/Theme.QuizApp" /> -->
+        <activity
+            android:name=".screens.admin.StaffActivity"
+            android:exported="false"
+            android:label="@string/title_activity_staff"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.AdminHomeActivity"
+            android:exported="false"
+            android:label="@string/title_activity_admin_home"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.student.activity.games.SpellBeeGameActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.QuizAppTheme" />
+         <activity
+         android:name=".screens.student.games.player.UnscrambledWordsGameActivity"
+         android:exported="false"
+         android:theme="@style/Theme.QuizAppTheme" />
+        <activity
+            android:name=".screens.student.activity.games.BasketBallGameActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.QuizAppTheme" />
+        <activity
+            android:name=".screens.student.activity.games.ArrowGameActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.QuizAppTheme" />
+        <activity
+            android:name=".screens.student.games.GameSelectorActivity"
+            android:exported="false"
+            android:label="@string/title_activity_game_selector"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.student.games.GameTypeSelectorActivity"
+            android:exported="false"
+            android:label="@string/title_activity_game_type_selector"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.admin.AdminLoginActivity"
+            android:exported="false"
+            android:label="@string/title_activity_admin_login"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.student.StudentHomeActivity"
+            android:exported="false"
+            android:label="@string/title_activity_student_home"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.comman.OnBoardingActivity"
+            android:exported="false"
+            android:label="@string/title_activity_on_boarding"
+            android:theme="@style/Theme.QuizApp" />
+        <activity
+            android:name=".screens.comman.SplashActivity"
+            android:exported="true"
+            android:label="@string/title_activity_splash"
+            android:theme="@style/Theme.QuizApp" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

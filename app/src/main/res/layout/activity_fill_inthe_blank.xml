@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:fillViewport="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/a_fill_in_the_blank_bg"
+    tools:context=".screens.student.activity.studentplayer.FillIntheBlankActivity">
+
+   <androidx.constraintlayout.widget.ConstraintLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+       <ImageView
+           android:id="@+id/bgBoxImage"
+           android:layout_width="0dp"
+           android:layout_height="300dp"
+           android:layout_marginStart="50dp"
+           android:layout_marginEnd="50dp"
+           android:layout_marginTop="35dp"
+           android:scaleType="fitXY"
+           android:src="@drawable/a_one_box"
+           app:layout_constraintBottom_toBottomOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toTopOf="parent"
+           app:layout_constraintVertical_bias="0" />
+
+       <TextView
+           android:id="@+id/tvQuestionTitle"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Question"
+           android:textColor="@color/white"
+           android:textStyle="bold"
+           app:layout_constraintEnd_toEndOf="@id/bgBoxImage"
+           app:layout_constraintStart_toStartOf="@id/bgBoxImage"
+           app:layout_constraintTop_toTopOf="@id/bgBoxImage" />
+
+       <RelativeLayout
+           android:id="@+id/fillContainer"
+           android:layout_width="0dp"
+           android:layout_height="0dp"
+           android:layout_margin="30dp"
+           app:layout_constraintBottom_toBottomOf="@id/bgBoxImage"
+           app:layout_constraintEnd_toEndOf="@id/bgBoxImage"
+           app:layout_constraintStart_toStartOf="@id/bgBoxImage"
+           app:layout_constraintTop_toTopOf="@id/bgBoxImage">
+
+           <LinearLayout
+               android:id="@+id/llParent"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginStart="30dp"
+               android:orientation="vertical"
+               android:layout_alignParentStart="true"
+               android:layout_alignParentEnd="true">
+
+               <!-- Row 1 -->
+               <LinearLayout
+                   android:id="@+id/row1"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:orientation="horizontal">
+
+                   <TextView
+                       android:id="@+id/tvFrontQ1"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="q1"
+                       android:textSize="24sp" />
+
+                   <EditText
+                       android:id="@+id/etAnswer1"
+                       android:layout_width="150dp"
+                       android:layout_height="30dp"
+                       android:layout_marginStart="10dp"
+                       android:background="@drawable/et_bg"
+                       android:paddingStart="20dp"
+                       android:textColor="@color/black" />
+
+                   <TextView
+                       android:id="@+id/tvEndQ1"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="10dp"
+                       android:text="q2 end part"
+                       android:textSize="24sp" />
+               </LinearLayout>
+
+               <!-- Row 2 -->
+               <LinearLayout
+                   android:id="@+id/row2"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:orientation="horizontal">
+
+                   <TextView
+                       android:id="@+id/tvFrontQ2"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="q1"
+                       android:textSize="24sp" />
+
+                   <EditText
+                       android:id="@+id/etAnswer2"
+                       android:layout_width="150dp"
+                       android:layout_height="30dp"
+                       android:layout_marginStart="10dp"
+                       android:background="@drawable/et_bg"
+                       android:paddingStart="20dp"
+                       android:textColor="@color/black" />
+
+                   <TextView
+                       android:id="@+id/tvEndQ2"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="10dp"
+                       android:text="q2 end part"
+                       android:textSize="24sp" />
+               </LinearLayout>
+
+               <!-- Row 3 -->
+               <LinearLayout
+                   android:id="@+id/row3"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:orientation="horizontal">
+
+                   <TextView
+                       android:id="@+id/tvFrontQ3"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="q1"
+                       android:textSize="24sp" />
+
+                   <EditText
+                       android:id="@+id/etAnswer3"
+                       android:layout_width="150dp"
+                       android:layout_height="30dp"
+                       android:layout_marginStart="10dp"
+                       android:background="@drawable/et_bg"
+                       android:paddingStart="20dp"
+                       android:textColor="@color/black" />
+
+                   <TextView
+                       android:id="@+id/tvEndQ3"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="10dp"
+                       android:text="q2 end part"
+                       android:textSize="24sp" />
+               </LinearLayout>
+
+               <!-- Row 4 -->
+               <LinearLayout
+                   android:id="@+id/row4"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:orientation="horizontal">
+
+                   <TextView
+                       android:id="@+id/tvFrontQ4"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="q1"
+                       android:textSize="24sp" />
+
+                   <EditText
+                       android:id="@+id/etAnswer4"
+                       android:layout_width="150dp"
+                       android:layout_height="30dp"
+                       android:layout_marginStart="10dp"
+                       android:background="@drawable/et_bg"
+                       android:paddingStart="20dp"
+                       android:textColor="@color/black" />
+
+                   <TextView
+                       android:id="@+id/tvEndQ4"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="10dp"
+                       android:text="q2 end part"
+                       android:textSize="24sp" />
+               </LinearLayout>
+           </LinearLayout>
+
+
+           <LinearLayout
+               android:id="@+id/buttonLayout"
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:layout_below="@+id/llParent"
+               android:layout_alignParentStart="true"
+
+               android:layout_alignParentEnd="true"
+               android:layout_marginStart="200dp"
+               android:layout_marginEnd="200dp"
+               android:layout_marginTop="20dp"
+               android:orientation="horizontal">
+
+               <androidx.appcompat.widget.AppCompatButton
+                   android:id="@+id/submitButton"
+                   android:layout_width="0dp"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1"
+                   android:background="@drawable/rec_layout_bg"
+                   android:backgroundTint="@android:color/holo_green_light"
+                   android:text="Submit"
+                   android:textAllCaps="false"
+                   android:textColor="@color/white" />
+
+
+               <androidx.appcompat.widget.AppCompatButton
+                   android:id="@+id/nextButton"
+                   android:layout_width="0dp"
+                   android:layout_height="wrap_content"
+                   android:layout_marginStart="30dp"
+                   android:layout_weight="1"
+                   android:background="@drawable/rec_layout_bg"
+                   android:backgroundTint="@android:color/holo_green_light"
+                   android:text="Next"
+                   android:textAllCaps="false"
+                   android:textColor="@color/white" />
+           </LinearLayout>
+       </RelativeLayout>
+
+
+
+       <ImageView
+           android:id="@+id/imgBoy"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:src="@drawable/fill_in_the_blank_boy"
+           app:layout_constraintBottom_toBottomOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toTopOf="parent"
+           app:layout_constraintVertical_bias="1" />
+
+       <ImageView
+           android:id="@+id/imgGirl"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:src="@drawable/fill_in_the_lank_girl"
+           app:layout_constraintBottom_toBottomOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintTop_toTopOf="parent"
+           app:layout_constraintVertical_bias="1" />
+       <ImageView
+           android:id="@+id/btnBack"
+           android:layout_width="70dp"
+           android:layout_height="50dp"
+           android:layout_marginStart="10dp"
+           android:translationY="-10dp"
+           app:layout_constraintBottom_toBottomOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toTopOf="parent"
+           app:layout_constraintVertical_bias="0"
+           app:srcCompat="@drawable/green_back_btn_img" />
+   </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

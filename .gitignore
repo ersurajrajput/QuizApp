@@ -1,0 +1,35 @@
+# Android Studio / Gradle files
+*.iml
+.gradle
+/local.properties
+
+# IntelliJ IDEA settings
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+
+# macOS system file
+.DS_Store
+
+# Build outputs
+/build
+/captures
+.externalNativeBuild
+.cxx
+
+# Firebase / Google Services
+google-services.json
+app/google-services.json
+# (if you have iOS too)
+GoogleService-Info.plist
+
+# Other local configurations
+local.properties
+
+# Optional: Ignore log files and keystores
+*.log
+*.keystore
+*.jks

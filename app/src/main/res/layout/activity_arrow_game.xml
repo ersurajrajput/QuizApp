@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_arrow"
+    tools:context=".screens.student.activity.games.ArrowGameActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/container"
+        android:elevation="5dp">
+        <!-- Score Board -->
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/score_board"
+            app:layout_constraintBottom_toTopOf="@+id/imageView2"
+            app:layout_constraintEnd_toEndOf="@+id/imageView2"
+            app:layout_constraintStart_toStartOf="@id/imageView2" />
+
+        <TextView
+            android:id="@+id/tvScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:translationY="-25dp"
+            android:text="0"
+            android:textSize="30sp"
+            android:textColor="@android:color/holo_red_dark"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView7"
+            app:layout_constraintEnd_toEndOf="@+id/imageView7"
+            app:layout_constraintStart_toStartOf="@+id/imageView7" />
+
+        <!-- Wooden Board Background -->
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="600dp"
+            android:layout_height="270dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/wodden_board"
+            android:translationY="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.566"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!-- Question Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/questionCard"
+            android:layout_width="500dp"
+            android:layout_height="70dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#FFFFFF"
+            android:background="#FFFFFF"
+            app:strokeWidth="2dp"
+            app:strokeColor="#FFA102"
+            app:layout_constraintTop_toTopOf="@+id/imageView2"
+            app:layout_constraintStart_toStartOf="@+id/imageView2"
+            app:layout_constraintEnd_toEndOf="@+id/imageView2"
+            android:layout_marginTop="35dp">
+
+            <TextView
+                android:id="@+id/tvQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="20dp"
+                android:gravity="center_vertical"
+                android:text="Sample Questionsss"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"/>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Option 1 -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/option1Card"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="10dp"
+            android:background="#FFFFFF"
+            android:paddingStart="0dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp"
+            app:layout_constraintStart_toStartOf="@+id/questionCard"
+            app:layout_constraintTop_toBottomOf="@+id/questionCard"
+            app:strokeColor="#FFA102"
+            app:strokeWidth="2dp">
+
+            <CheckBox
+                android:id="@+id/option1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingStart="12dp"
+                android:layout_marginStart="20dp"
+                android:text="Option 1"
+                android:textColor="@android:color/black" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Option 2 -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/option2Card"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:background="#FFFFFF"
+            android:paddingStart="0dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp"
+            app:layout_constraintEnd_toEndOf="@+id/questionCard"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toEndOf="@+id/option1Card"
+            app:layout_constraintTop_toBottomOf="@+id/questionCard"
+            app:strokeColor="#FFA102"
+            app:strokeWidth="2dp">
+
+            <CheckBox
+                android:id="@+id/option2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingStart="12dp"
+                android:layout_marginStart="20dp"
+
+                android:text="Option 2"
+                android:textColor="@android:color/black" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Option 3 -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/option3Card"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="8dp"
+            android:background="#FFFFFF"
+            android:paddingStart="0dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp"
+            app:layout_constraintStart_toStartOf="@+id/option1Card"
+            app:layout_constraintTop_toBottomOf="@+id/option1Card"
+            app:strokeColor="#FFA102"
+            app:strokeWidth="2dp">
+
+            <CheckBox
+                android:id="@+id/option3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingStart="12dp"
+                android:layout_marginStart="20dp"
+
+                android:text="Option 3"
+                android:textColor="@android:color/black" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Option 4 -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/option4Card"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="8dp"
+            android:background="#FFFFFF"
+            android:paddingStart="0dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp"
+            app:layout_constraintEnd_toEndOf="@+id/option2Card"
+            app:layout_constraintTop_toBottomOf="@+id/option2Card"
+            app:strokeColor="#FFA102"
+            app:strokeWidth="2dp">
+
+            <CheckBox
+                android:id="@+id/option4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_marginStart="20dp"
+
+                android:paddingStart="12dp"
+                android:text="Option 4"
+                android:textColor="@android:color/black" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="Submit"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageView2"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="20dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintHorizontal_bias="0"
+            android:text="Next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageView2" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/ivBoy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/final_boy" />
+
+    <ImageView
+        android:id="@+id/imageView10"
+        android:layout_width="113dp"
+        android:layout_height="266dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginBottom="150dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/target" />
+    <ImageView
+        android:id="@+id/ivBack"
+
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:scaleType="fitXY"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="5dp"
+        app:srcCompat="@drawable/wodden_back_btn" />
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

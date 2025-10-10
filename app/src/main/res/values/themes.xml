@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.QuizApp" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- Compose Material3 theme -->
+    <style name="Theme.QuizAppTheme" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize colors here -->
+    </style>
+
+</resources>

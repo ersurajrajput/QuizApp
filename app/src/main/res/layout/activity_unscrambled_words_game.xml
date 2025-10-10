@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/un_bg"
+    tools:context=".screens.student.games.player.UnscrambledWordsGameActivity">
+
+    <!-- Word Hint Card -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardScrambledWord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="100dp"
+        app:cardCornerRadius="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/flWordContainer"
+        app:layout_constraintEnd_toEndOf="@+id/flWordContainer"
+        app:layout_constraintStart_toStartOf="@+id/flWordContainer">
+
+        <TextView
+            android:id="@+id/tvScrambledWord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="20sp"
+            android:layout_marginEnd="20sp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="ctonors"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Frame for background + letter boxes -->
+    <FrameLayout
+        android:id="@+id/flWordContainer"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintVertical_bias="1"
+        app:layout_constraintBottom_toTopOf="@+id/keyboardContainer"
+        app:layout_constraintEnd_toEndOf="@+id/keyboardContainer"
+        app:layout_constraintStart_toStartOf="@+id/keyboardContainer"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imgHangerBox"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/hanger_box" />
+
+        <LinearLayout
+            android:id="@+id/boxContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="10dp" />
+    </FrameLayout>
+    <!-- Word Hint below white boxes -->
+
+    <!-- Keyboard -->
+    <LinearLayout
+        android:id="@+id/keyboardContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- Row 1 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/keyQ"
+                style="@style/KeyboardKey"
+                android:src="@drawable/q" />
+
+            <ImageView
+                android:id="@+id/keyW"
+                style="@style/KeyboardKey"
+                android:src="@drawable/w" />
+
+            <ImageView
+                android:id="@+id/keyE"
+                style="@style/KeyboardKey"
+                android:src="@drawable/e" />
+
+            <ImageView
+                android:id="@+id/keyR"
+                style="@style/KeyboardKey"
+                android:src="@drawable/r" />
+
+            <ImageView
+                android:id="@+id/keyT"
+                style="@style/KeyboardKey"
+                android:src="@drawable/t" />
+
+            <ImageView
+                android:id="@+id/keyY"
+                style="@style/KeyboardKey"
+                android:src="@drawable/y" />
+
+            <ImageView
+                android:id="@+id/keyU"
+                style="@style/KeyboardKey"
+                android:src="@drawable/u" />
+
+            <ImageView
+                android:id="@+id/keyI"
+                style="@style/KeyboardKey"
+                android:src="@drawable/i" />
+
+            <ImageView
+                android:id="@+id/keyO"
+                style="@style/KeyboardKey"
+                android:src="@drawable/o" />
+
+            <ImageView
+                android:id="@+id/keyP"
+                style="@style/KeyboardKey"
+                android:src="@drawable/p" />
+        </LinearLayout>
+
+        <!-- Row 2 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/keyA"
+                style="@style/KeyboardKey"
+                android:src="@drawable/a" />
+
+            <ImageView
+                android:id="@+id/keyS"
+                style="@style/KeyboardKey"
+                android:src="@drawable/s" />
+
+            <ImageView
+                android:id="@+id/keyD"
+                style="@style/KeyboardKey"
+                android:src="@drawable/d" />
+
+            <ImageView
+                android:id="@+id/keyF"
+                style="@style/KeyboardKey"
+                android:src="@drawable/f" />
+
+            <ImageView
+                android:id="@+id/keyG"
+                style="@style/KeyboardKey"
+                android:src="@drawable/g" />
+
+            <ImageView
+                android:id="@+id/keyH"
+                style="@style/KeyboardKey"
+                android:src="@drawable/h" />
+
+            <ImageView
+                android:id="@+id/keyJ"
+                style="@style/KeyboardKey"
+                android:src="@drawable/j" />
+
+            <ImageView
+                android:id="@+id/keyK"
+                style="@style/KeyboardKey"
+                android:src="@drawable/k" />
+
+            <ImageView
+                android:id="@+id/keyL"
+                style="@style/KeyboardKey"
+                android:src="@drawable/l" />
+        </LinearLayout>
+
+        <!-- Row 3 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/keyZ"
+                style="@style/KeyboardKey"
+                android:src="@drawable/z" />
+
+            <ImageView
+                android:id="@+id/keyX"
+                style="@style/KeyboardKey"
+                android:src="@drawable/x" />
+
+            <ImageView
+                android:id="@+id/keyC"
+                style="@style/KeyboardKey"
+                android:src="@drawable/c" />
+
+            <ImageView
+                android:id="@+id/keyV"
+                style="@style/KeyboardKey"
+                android:src="@drawable/v" />
+
+            <ImageView
+                android:id="@+id/keyB"
+                style="@style/KeyboardKey"
+                android:src="@drawable/b" />
+
+            <ImageView
+                android:id="@+id/keyN"
+                style="@style/KeyboardKey"
+                android:src="@drawable/n" />
+
+            <ImageView
+                android:id="@+id/keyM"
+                style="@style/KeyboardKey"
+                android:src="@drawable/m" />
+
+            <ImageView
+                android:id="@+id/keyDelete"
+                style="@style/KeyboardKey"
+                android:src="@drawable/backspace" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Left score box -->
+    <ImageView
+        android:id="@+id/imgScoreBox"
+        android:layout_width="100dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="50dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/spell_bee_blue_box"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/keyboardContainer"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Submit box -->
+    <ImageView
+        android:id="@+id/btnSubmit"
+        android:layout_width="100dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="50dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/spell_bee_blue_box"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/keyboardContainer" />
+
+    <!-- Score Label -->
+    <TextView
+        android:id="@+id/tvScoreLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Score"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/imgScoreBox"
+        app:layout_constraintEnd_toEndOf="@+id/imgScoreBox"
+        app:layout_constraintStart_toStartOf="@+id/imgScoreBox" />
+
+    <!-- Score value -->
+    <TextView
+        android:id="@+id/tvScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/imgScoreBox"
+        app:layout_constraintEnd_toEndOf="@+id/imgScoreBox"
+        app:layout_constraintStart_toStartOf="@+id/imgScoreBox"
+        app:layout_constraintTop_toTopOf="@+id/imgScoreBox" />
+
+    <!-- Submit label -->
+    <TextView
+        android:id="@+id/tvSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:textAllCaps="true"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/btnSubmit"
+        app:layout_constraintEnd_toEndOf="@+id/btnSubmit"
+        app:layout_constraintStart_toStartOf="@+id/btnSubmit"
+        app:layout_constraintTop_toTopOf="@+id/btnSubmit" />
+
+    <TextView
+        android:id="@+id/tvWordHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+
+        android:text="a plant that has red, yellow or orange leaves"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/cardScrambledWord"
+        app:layout_constraintEnd_toEndOf="@+id/cardScrambledWord"
+        app:layout_constraintStart_toStartOf="@+id/cardScrambledWord" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
