@@ -41,7 +41,7 @@ class StaffActivity : ComponentActivity() {
     }
 }
 
-val roles = listOf("Admin", "Manager", "Teacher", "Content Creator")
+val roles = listOf("Admin",  "Staff")
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

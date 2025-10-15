@@ -1,5 +1,6 @@
 package com.ersurajrajput.quizapp.screens.admin
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -25,10 +26,8 @@ import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Games
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.LocalActivity
-import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Schema
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,6 +38,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
@@ -50,6 +50,13 @@ import androidx.compose.ui.unit.dp
 import com.ersurajrajput.quizapp.screens.admin.ui.theme.ActivitySelectorActivity
 import com.ersurajrajput.quizapp.screens.admin.ui.theme.QuizAppTheme
 import com.ersurajrajput.quizapp.screens.comman.OnBoardingActivity
+
+// Assumed imports for navigation targets
+import com.ersurajrajput.quizapp.screens.admin.StaffActivity
+import com.ersurajrajput.quizapp.screens.admin.GamesManagementActivity
+import com.ersurajrajput.quizapp.screens.admin.DiagramManagementActivity
+import com.ersurajrajput.quizapp.screens.admin.DictonaryManagementActivity
+
 
 class AdminHomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +72,15 @@ class AdminHomeActivity : ComponentActivity() {
 
 data class AdminMenuItem(val title: String, val icon: ImageVector)
 
-val menuItems = listOf(
+// helper session
+fun deleteSession(context: Context){
+    val prefs = context.getSharedPreferences("SrijanQuizApp", Context.MODE_PRIVATE)
+    prefs.edit()
+        .clear()
+        .apply()
+
+}
+val baseMenuItems = listOf(
     AdminMenuItem("Dictionary", Icons.Default.MenuBook),
     AdminMenuItem("Activities", Icons.Default.LocalActivity),
     AdminMenuItem("Games", Icons.Default.Games),
@@ -78,39 +93,58 @@ val menuItems = listOf(
 fun AdminHomeScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
+    // 1. Determine if the current user is an admin by reading SharedPreferences
+    val isAdmin = remember {
+        val prefs = context.getSharedPreferences("SrijanQuizApp", Context.MODE_PRIVATE)
+        prefs.getString("Role", "") == "Admin"
+    }
+
+    // 2. Filter the menu items based on the user's role
+    val menuItems = remember(isAdmin) {
+        if (isAdmin) {
+            baseMenuItems // Show all items if truly admin
+        } else {
+            // Filter out the "Staff" item if not admin
+            baseMenuItems.filter { it.title != "Staff" }
+        }
+    }
+
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
 
             TopAppBar(
                 title = {
-                   Row(
-                       verticalAlignment = Alignment.CenterVertically,
-                       horizontalArrangement = Arrangement.Center
-                   ) {
-                       Icon(
-                           imageVector = Icons.Default.Logout,
-                           contentDescription = "Logout",
-                           modifier = Modifier
-                               .graphicsLayer {
-                                   rotationY = 180f // Flip the icon horizontally
-                               }
-                               .size(24.dp)
-                               .clickable {
-                                   // Handle logout action
-                                   val intent = Intent(context, OnBoardingActivity::class.java)
-                                   intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                   context.startActivity(intent)
-                               },
-                           tint = MaterialTheme.colorScheme.onPrimaryContainer
-                       )
-                       Spacer(modifier = Modifier.width(80.dp))
-                       Text(
-                           text = "Admin Dashboard",
-                           fontWeight = FontWeight.Bold,
-                           color = MaterialTheme.colorScheme.onPrimaryContainer
-                       )
-                   }
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start // Align content to the start
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.Logout, // Use AutoMirrored.Filled.Logout for better look
+                            contentDescription = "Logout",
+                            modifier = Modifier
+                                .graphicsLayer { rotationY = 180f } // Flip icon
+                                .size(24.dp)
+                                .clickable {
+                                    // 1. Delete session from SharedPreferences
+                                    deleteSession(context)
+
+                                    // 2. Navigate to OnBoardingActivity and clear back stack
+                                    val intent = Intent(context, OnBoardingActivity::class.java).apply {
+                                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    }
+                                    context.startActivity(intent)
+                                },
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                        Spacer(modifier = Modifier.width(32.dp)) // Reduced width for better centering
+                        Text(
+                            text = "Admin Dashboard",
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier.fillMaxWidth() // Allow text to take remaining space
+                        )
+                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -132,24 +166,20 @@ fun AdminHomeScreen(modifier: Modifier = Modifier) {
                 AdminMenuCard(
                     item = item,
                     onClick = {
-                        if (item.title.lowercase().contains("staff")) {
-                            var intent = Intent(context, StaffActivity::class.java)
-                            context.startActivity(intent)
-                        } else if (item.title.lowercase().contains("games")) {
-                            var intent = Intent(context, GamesManagementActivity::class.java)
-                            context.startActivity(intent)
-                        }else if (item.title.lowercase().contains("diagram")){
-                            var intent = Intent(context, DiagramManagementActivity::class.java)
-                            context.startActivity(intent)
-                        }else if (item.title.lowercase().contains("dictionary")){
-                            var intent = Intent(context, DictonaryManagementActivity::class.java)
-                            context.startActivity(intent)
-                        }else if (item.title.lowercase().contains("activities")){
-                            var intent = Intent(context, ActivitySelectorActivity::class.java)
-                            context.startActivity(intent)
+                        // Using a simple map or sealed class would be cleaner, but using current structure for now
+                        val targetClass = when (item.title) {
+                            "Staff" -> StaffActivity::class.java
+                            "Games" -> GamesManagementActivity::class.java
+                            "Diagram" -> DiagramManagementActivity::class.java
+                            "Dictionary" -> DictonaryManagementActivity::class.java
+                            "Activities" -> ActivitySelectorActivity::class.java
+                            else -> null
                         }
-                        Toast.makeText(context, "${item.title} clicked", Toast.LENGTH_SHORT).show()
-                        // TODO: Navigate to the respective screen
+
+                        targetClass?.let {
+                            val intent = Intent(context, it)
+                            context.startActivity(intent)
+                        } ?: Toast.makeText(context, "${item.title} clicked", Toast.LENGTH_SHORT).show()
                     }
                 )
             }
@@ -196,4 +226,3 @@ fun AdminHomeScreenPreview() {
         AdminHomeScreen()
     }
 }
-

@@ -1,20 +1,21 @@
 package com.ersurajrajput.quizapp.screens.student.activity.studentplayer
 
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.ersurajrajput.quizapp.R
 import com.ersurajrajput.quizapp.databinding.ActivityMcqimageBinding
 import com.ersurajrajput.quizapp.models.ImageMCQModel
 import com.ersurajrajput.quizapp.repo.ImageMcqRepo
-
-// NOTE: The 'lifecycleScope' and 'kotlinx.coroutines.launch' imports were removed as they are no longer used.
+import android.view.Gravity // ADDED: Required for centering text
+import android.widget.TextView // ADDED: Required for creating a custom centered title
+import android.view.WindowManager // ADDED: Required for FLAG_FULLSCREEN
 
 class MCQImageActivity : AppCompatActivity() {
 
@@ -31,6 +32,14 @@ class MCQImageActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // START: Added to hide status bar (full screen mode)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+        // END: Added to hide status bar
+
         binding = ActivityMcqimageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -149,56 +158,75 @@ class MCQImageActivity : AppCompatActivity() {
     private fun showResultDialog(isCorrect: Boolean, onContinue: () -> Unit) {
         val title: String
         // In a real app, these would be R.raw.sound_file.
-         val soundResId: Int
+        val soundResId: Int
 
         if (isCorrect) {
             title = "Correct!"
             // TODO: Ensure you have a sound file named 'excellent.mp3' in your res/raw folder.
-             soundResId = R.raw.excellent
+            soundResId = R.raw.excellent
         } else {
             title = "Wrong Answer"
             // TODO: Ensure you have a sound file named 'coomon_you_can_do_better_then_that.mp3' in your res/raw folder.
-             soundResId = R.raw.common_u_can_do_batter_than_that
+            soundResId = R.raw.common_u_can_do_batter_than_that
         }
 
-        // The sound playing part is commented out as I cannot add the resources (R.raw.*).
-        // To make it work, add audio files to your project's 'res/raw' directory and uncomment this block.
+        // START OF TITLE CENTER FIX: Create a custom TextView and set its gravity to center.
+        // Changed gravity to Gravity.CENTER and adjusted vertical padding to push the text vertically.
+        val titleTextView = TextView(this).apply {
+            text = title
+            gravity = Gravity.CENTER // Center the text both horizontally and vertically
+            textSize = 24f // Increase font size for better visibility
+            setTextColor(Color.BLACK)
+            // Increased top/bottom padding to give the title view more vertical space
+            setPadding(40, 80, 40, 80)
+        }
+        // END OF TITLE CENTER FIX
 
+        val builder = AlertDialog.Builder(this)
+        builder.setCustomTitle(titleTextView) // Use the custom, centered TextView as the title
+        builder.setCancelable(false)
+        // OK button removed as requested for auto-hide.
+
+        val dialog = builder.create()
+
+        // Apply custom XML background
+        val backgroundDrawable = ContextCompat.getDrawable(this, R.drawable.popup_bg)
+        dialog.window?.setBackgroundDrawable(backgroundDrawable)
+
+        // Set onDismissListener to execute continuation logic (moving to next question/ending quiz).
+        // This is crucial now that there is no OK button.
+        dialog.setOnDismissListener {
+            onContinue()
+        }
+
+        // Show the dialog
+        dialog.show()
+
+        var soundPlayed = false
         try {
             val mediaPlayer = MediaPlayer.create(this, soundResId)
-            mediaPlayer?.setOnCompletionListener { it.release() }
-            mediaPlayer?.start()
+            if (mediaPlayer != null) {
+                mediaPlayer.setOnCompletionListener {
+                    // Sound finished, dismiss the dialog. onDismissListener will handle onContinue().
+                    it.release()
+                    if (dialog.isShowing) {
+                        dialog.dismiss()
+                    }
+                }
+                mediaPlayer.start()
+                soundPlayed = true
+            }
         } catch (e: Exception) {
             // This toast helps in debugging if the sound file is missing.
             Toast.makeText(this, "Error playing sound. Resource not found.", Toast.LENGTH_SHORT).show()
         }
 
-
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(title)
-        builder.setCancelable(false)
-        builder.setPositiveButton("OK") { dialog, _ ->
-            dialog.dismiss()
+        // If sound failed to play (mediaPlayer was null or exception occurred), dismiss immediately.
+        if (!soundPlayed) {
+            // Dismiss immediately. This will trigger onDismissListener, which calls onContinue().
+            if (dialog.isShowing) {
+                dialog.dismiss()
+            }
         }
-
-        val dialog = builder.create()
-
-        // Programmatically create a drawable to simulate the 'popup_bg' background.
-        val backgroundDrawable = GradientDrawable().apply {
-            shape = GradientDrawable.RECTANGLE
-            setColor(if (isCorrect) Color.parseColor("#E9F7EF") else Color.parseColor("#FDEBE9")) // Light Green / Light Red
-            cornerRadius = 40f // Rounded corners
-            setStroke(5, if (isCorrect) Color.parseColor("#2ECC71") else Color.parseColor("#E74C3C")) // Green / Red border
-        }
-
-        dialog.window?.setBackgroundDrawable(backgroundDrawable)
-
-        // The onContinue lambda is called when the dialog is dismissed.
-        dialog.setOnDismissListener {
-            onContinue()
-        }
-
-        dialog.show()
     }
 }
-

@@ -1,5 +1,6 @@
 package com.ersurajrajput.quizapp.screens.admin.activity
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -89,6 +91,7 @@ fun FillInTheBlanksManagementScreen(
     onAddQuiz: () -> Unit,
     onEditQuiz: (FillInTheBlanksModel) -> Unit
 ) {
+    var context = LocalContext.current
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -97,7 +100,17 @@ fun FillInTheBlanksManagementScreen(
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onPrimary
-                )
+                ),
+                navigationIcon = {
+                    IconButton(onClick = {
+                        (context as? Activity)?.finish()
+                    }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                }
             )
         },
         floatingActionButton = {

@@ -1,5 +1,7 @@
 package com.ersurajrajput.quizapp.screens.student.dictionary
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,6 +11,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -44,18 +48,33 @@ class DictionarySelectorActivity : ComponentActivity() {
     }
 }
 
+@SuppressLint("ContextCastToActivity")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DictionarySelectorScreen(dictionaries: List<DictionaryModel>) {
     val context = LocalContext.current
+    val activity = LocalContext.current as? Activity // Get the current activity to call finish()
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Select a Dictionary") },
+                // START: Back Button Added
+                navigationIcon = {
+                    if (activity != null) {
+                        IconButton(onClick = { activity.finish() }) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = "Back"
+                            )
+                        }
+                    }
+                },
+                // END: Back Button Added
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary // Ensure icon color is visible
                 )
             )
         },

@@ -11,6 +11,7 @@ import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
 import android.view.Window
+import android.view.WindowManager // ADDED: Required for FLAG_FULLSCREEN
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -46,6 +47,14 @@ class FillIntheBlankActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // START: Added to hide status bar (full screen mode)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+        // END: Added to hide status bar
+
         enableEdgeToEdge()
         setContentView(R.layout.activity_fill_inthe_blank)
 
@@ -143,7 +152,7 @@ class FillIntheBlankActivity : AppCompatActivity() {
         // Populate rows with the current page's questions
         questionsOnPage.forEachIndexed { index, question ->
             questionRows[index].visibility = View.VISIBLE
-            val parts = question.text.split("___")
+            val parts = question.text.split("____")
             frontTextViews[index].text = parts.getOrNull(0) ?: ""
             endTextViews[index].text = if (parts.size > 1) parts[1] else ""
 
@@ -287,4 +296,3 @@ class FillIntheBlankActivity : AppCompatActivity() {
         return if (start < end) questions.subList(start, end) else emptyList()
     }
 }
-

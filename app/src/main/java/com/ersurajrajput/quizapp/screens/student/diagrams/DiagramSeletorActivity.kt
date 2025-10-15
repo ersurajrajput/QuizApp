@@ -1,5 +1,7 @@
 package com.ersurajrajput.quizapp.screens.student.diagrams
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -11,6 +13,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Schema
@@ -22,6 +25,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -49,30 +55,65 @@ class DiagramSelectorActivity : ComponentActivity() {
 
         setContent {
             QuizAppTheme {
-                var diagrams by remember { mutableStateOf<List<DiagramModel>>(emptyList()) }
-                var isLoading by remember { mutableStateOf(true) }
-
-                // fetch data when Composable is first launched
-                LaunchedEffect(Unit) {
-                    repo.getDiagramsList { list ->
-                        diagrams = list
-                        isLoading = false
-                    }
-                }
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    if (isLoading) {
-                        LoadingScreen()
-                    } else {
-                        DiagramList(
-                            diagrams = diagrams,
-                            modifier = Modifier.padding(innerPadding)
-                        )
-                    }
-                }
+                // Delegate all UI and data fetching logic to the new Composable screen
+                DiagramSelectorScreen(repo = repo)
             }
         }
     }
 }
+
+// NEW COMPOSABLE: Encapsulates the screen structure and logic
+@SuppressLint("ContextCastToActivity")
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DiagramSelectorScreen(repo: DiagramRepo) {
+    var diagrams by remember { mutableStateOf<List<DiagramModel>>(emptyList()) }
+    var isLoading by remember { mutableStateOf(true) }
+    val activity = LocalContext.current as? Activity // Get activity reference for finish()
+
+    // fetch data when Composable is first launched
+    LaunchedEffect(Unit) {
+        repo.getDiagramsList { list ->
+            diagrams = list
+            isLoading = false
+        }
+    }
+
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(
+                title = { Text("Select a Diagram") },
+                // Back Button Implementation
+                navigationIcon = {
+                    if (activity != null) {
+                        IconButton(onClick = { activity.finish() }) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = "Back"
+                            )
+                        }
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            )
+        }
+    ) { innerPadding ->
+        if (isLoading) {
+            LoadingScreen()
+        } else {
+            DiagramList(
+                diagrams = diagrams,
+                modifier = Modifier.padding(innerPadding)
+            )
+        }
+    }
+}
+
 
 @Composable
 fun DiagramList(diagrams: List<DiagramModel>, modifier: Modifier = Modifier) {
@@ -147,4 +188,3 @@ fun LoadingScreen() {
         CircularProgressIndicator()
     }
 }
-

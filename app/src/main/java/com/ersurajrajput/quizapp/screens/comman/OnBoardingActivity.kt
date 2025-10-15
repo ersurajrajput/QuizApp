@@ -1,5 +1,6 @@
 package com.ersurajrajput.quizapp.screens.comman
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -51,6 +52,14 @@ class OnBoardingActivity : ComponentActivity() {
         }
     }
 }
+// Helper function to save session data
+fun saveSession(context: Context, isLoggedIn: Boolean, role: String) {
+    val prefs = context.getSharedPreferences("SrijanQuizApp", Context.MODE_PRIVATE)
+    prefs.edit()
+        .putBoolean("isLoggedIn", isLoggedIn)
+        .putString("Role", role)
+        .apply()
+}
 
 @Composable
 fun OnBoardingScreen(modifier: Modifier = Modifier) {
@@ -79,6 +88,7 @@ fun OnBoardingScreen(modifier: Modifier = Modifier) {
             icon = Icons.Default.School,
             onClick = {
 //                 Navigate to StudentHomeActivity
+                saveSession(context,true,"student")
                 val intent = Intent(context, StudentHomeActivity::class.java)
                 context.startActivity(intent)
             }
@@ -144,4 +154,5 @@ fun OnBoardingScreenPreview() {
         OnBoardingScreen()
     }
 }
+
 

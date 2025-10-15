@@ -71,21 +71,36 @@ dependencies {
 
 
 
-    implementation ("com.github.bumptech.glide:glide:4.16.0")
-    annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
-    implementation("com.github.bumptech.glide:compose:1.0.0-alpha.1")
+    implementation ("com.github.bumptech.glide:glide:5.0.5")
+    annotationProcessor ("com.github.bumptech.glide:compiler:5.0.5")
+    implementation("com.github.bumptech.glide:compose:1.0.0-beta08")
 
     // youtube player
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
 
-
-
     ///// cloudnary
-    implementation("com.cloudinary:cloudinary-android:3.0.2")
-
+    implementation("com.cloudinary:cloudinary-android:3.1.2")
     // Coil for Jetpack Compose (image loading)
     implementation("io.coil-kt:coil-compose:2.7.0")
+    implementation("androidx.gridlayout:gridlayout:1.1.0")
 
-    implementation("androidx.gridlayout:gridlayout:1.0.0")
-
+}
+afterEvaluate {
+    tasks.filter { it.name.contains("mergeNativeLibs") }.forEach { task ->
+        task.doLast {
+            val soFiles = fileTree("$buildDir/intermediates/merged_native_libs/") {
+                include("**/*.so")
+            }
+            soFiles.forEach { file ->
+                println("Re-aligning: ${file.name}")
+                try {
+                    exec {
+                        commandLine("patchelf", "--page-size", "65536", file.absolutePath)
+                    }
+                } catch (e: Exception) {
+                    println("Skipping ${file.name}: patchelf not found or failed.")
+                }
+            }
+        }
+    }
 }

@@ -70,6 +70,12 @@ class UnscrambledWordsGameActivity : AppCompatActivity() {
             return
         }
         fetchGameDetails(gameId)
+        btnBack()
+    }
+    fun btnBack(){
+        binding.btnBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
     }
 
     private fun fetchGameDetails(gameId: String) {

@@ -5,6 +5,8 @@ import com.ersurajrajput.quizapp.models.StaffModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.toObject
+
 class StaffRepo {
     private val db = FirebaseFirestore.getInstance()
      val staffCollection = db.collection("staffs")
@@ -74,5 +76,46 @@ class StaffRepo {
                 onComplete(false)
             }
     }
+
+
+
+    fun findStaffByIdAndPass(
+        email: String,
+        pass: String,
+        onSuccess: (StaffModel) -> Unit,
+        onResult: (Boolean, String) -> Unit
+    ) {
+        Log.d("Firestore", "Searching for: email=${email.trim()} password=${pass.trim()}")
+
+        db.collection("staffs")
+            .whereEqualTo("email", email.trim())
+            .whereEqualTo("password", pass.trim())
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                Log.d("Firestore", "Documents found: ${querySnapshot.size()}")
+                for (doc in querySnapshot.documents) {
+                    Log.d("Firestore", "Document data: ${doc.data}")
+                }
+
+                if (!querySnapshot.isEmpty) {
+                    val staff = querySnapshot.documents[0].toObject(StaffModel::class.java)
+                    if (staff != null) {
+                        onSuccess(staff) // ✅ Pass staff object if found
+                        onResult(true, "Login successful") // ✅ Notify success
+                    } else {
+                        onResult(false, "Staff data invalid")
+                    }
+                } else {
+                    onResult(false, "No staff found with provided credentials")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("Firestore", "Error querying staff", exception)
+                onResult(false, "Error: ${exception.message}")
+            }
+    }
+
+
+
 
 }

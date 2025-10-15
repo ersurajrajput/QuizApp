@@ -1,5 +1,6 @@
 package com.ersurajrajput.quizapp.screens.student
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -26,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.ersurajrajput.quizapp.screens.admin.deleteSession
 import com.ersurajrajput.quizapp.screens.admin.ui.theme.ActivitySelectorActivity
 import com.ersurajrajput.quizapp.screens.comman.OnBoardingActivity
 import com.ersurajrajput.quizapp.screens.student.dictionary.DictionarySelectorActivity
@@ -44,7 +46,13 @@ class StudentHomeActivity : ComponentActivity() {
         }
     }
 }
+fun deleteSession(context: Context){
+    val prefs = context.getSharedPreferences("SrijanQuizApp", Context.MODE_PRIVATE)
+    prefs.edit()
+        .clear()
+        .apply()
 
+}
 // --- Data Model ---
 data class Feature(val name: String, val icon: androidx.compose.ui.graphics.vector.ImageVector)
 
@@ -74,8 +82,12 @@ fun StudentHomeScreen(modifier: Modifier = Modifier) {
                                 .graphicsLayer { rotationY = 180f } // Flip icon
                                 .size(24.dp)
                                 .clickable {
-                                    val intent = Intent(context, OnBoardingActivity::class.java)
-                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    deleteSession(context)
+
+                                    // 2. Navigate to OnBoardingActivity and clear back stack
+                                    val intent = Intent(context, OnBoardingActivity::class.java).apply {
+                                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    }
                                     context.startActivity(intent)
                                 },
                             tint = MaterialTheme.colorScheme.onPrimaryContainer

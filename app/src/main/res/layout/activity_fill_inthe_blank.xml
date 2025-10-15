@@ -69,12 +69,11 @@
                        android:id="@+id/tvFrontQ1"
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
-                       android:text="q1"
-                       android:textSize="24sp" />
+                       android:text="q1" />
 
                    <EditText
                        android:id="@+id/etAnswer1"
-                       android:layout_width="150dp"
+                       android:layout_width="100dp"
                        android:layout_height="30dp"
                        android:layout_marginStart="10dp"
                        android:background="@drawable/et_bg"
@@ -86,8 +85,7 @@
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
                        android:layout_marginStart="10dp"
-                       android:text="q2 end part"
-                       android:textSize="24sp" />
+                       android:text="q2 end part" />
                </LinearLayout>
 
                <!-- Row 2 -->
@@ -101,8 +99,7 @@
                        android:id="@+id/tvFrontQ2"
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
-                       android:text="q1"
-                       android:textSize="24sp" />
+                       android:text="q1"  />
 
                    <EditText
                        android:id="@+id/etAnswer2"
@@ -118,8 +115,7 @@
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
                        android:layout_marginStart="10dp"
-                       android:text="q2 end part"
-                       android:textSize="24sp" />
+                       android:text="q2 end part" />
                </LinearLayout>
 
                <!-- Row 3 -->
@@ -133,8 +129,7 @@
                        android:id="@+id/tvFrontQ3"
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
-                       android:text="q1"
-                       android:textSize="24sp" />
+                       android:text="q1" />
 
                    <EditText
                        android:id="@+id/etAnswer3"
@@ -150,8 +145,7 @@
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
                        android:layout_marginStart="10dp"
-                       android:text="q2 end part"
-                       android:textSize="24sp" />
+                       android:text="q2 end part"  />
                </LinearLayout>
 
                <!-- Row 4 -->
@@ -165,8 +159,7 @@
                        android:id="@+id/tvFrontQ4"
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
-                       android:text="q1"
-                       android:textSize="24sp" />
+                       android:text="q1"  />
 
                    <EditText
                        android:id="@+id/etAnswer4"
@@ -182,8 +175,7 @@
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
                        android:layout_marginStart="10dp"
-                       android:text="q2 end part"
-                       android:textSize="24sp" />
+                       android:text="q2 end part" />
                </LinearLayout>
            </LinearLayout>
 
@@ -259,6 +251,13 @@
            app:layout_constraintTop_toTopOf="parent"
            app:layout_constraintVertical_bias="0"
            app:srcCompat="@drawable/green_back_btn_img" />
+       <androidx.constraintlayout.widget.ConstraintLayout
+           android:id="@+id/ansContainer"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           app:layout_constraintBottom_toBottomOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"/>
    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

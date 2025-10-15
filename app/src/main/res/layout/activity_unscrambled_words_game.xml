@@ -9,6 +9,19 @@
     android:background="@drawable/un_bg"
     tools:context=".screens.student.games.player.UnscrambledWordsGameActivity">
 
+    <ImageView
+        android:id="@+id/btnBack"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/back_btn_blue"
+        app:layout_constraintHorizontal_bias="0"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <!-- Word Hint Card -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardScrambledWord"

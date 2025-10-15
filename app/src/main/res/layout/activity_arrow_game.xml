@@ -214,6 +214,8 @@
             app:layout_constraintStart_toEndOf="@+id/imageView2" />
 
 
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
@@ -221,21 +223,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:elevation="50dp"
+      
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/final_boy" />
 
-    <ImageView
-        android:id="@+id/imageView10"
-        android:layout_width="113dp"
-        android:layout_height="266dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginBottom="150dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/target" />
+
+
+
+
     <ImageView
         android:id="@+id/ivBack"
 

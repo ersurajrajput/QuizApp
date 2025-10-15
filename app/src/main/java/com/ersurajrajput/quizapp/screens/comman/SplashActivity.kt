@@ -1,7 +1,9 @@
 package com.ersurajrajput.quizapp.screens.comman
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
@@ -43,12 +45,18 @@ import com.ersurajrajput.quizapp.ui.theme.QuizAppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+// Assumed imports for target activities based on typical project structure
+import com.ersurajrajput.quizapp.screens.admin.AdminHomeActivity
+import com.ersurajrajput.quizapp.screens.student.StudentHomeActivity
+
+
 class SplashActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        DummyRepo().populateFillInTheBlanks()
+//        DummyRepo().populateFillInTheBlanks()
+
         setContent {
             QuizAppTheme {
                 SplashScreen()
@@ -64,13 +72,15 @@ class SplashActivity : ComponentActivity() {
         // Animate the scale of the logo
         val scaleAnimation by animateFloatAsState(
             targetValue = if (startAnimation) 1f else 0.5f,
-            animationSpec = tween(durationMillis = 1500)
+            animationSpec = tween(durationMillis = 1500),
+            label = "ScaleAnimation"
         )
 
         // Animate the alpha of the text
         val alphaAnimation by animateFloatAsState(
             targetValue = if (startAnimation) 1f else 0f,
-            animationSpec = tween(durationMillis = 1500)
+            animationSpec = tween(durationMillis = 1500),
+            label = "AlphaAnimation"
         )
 
         LaunchedEffect(key1 = true) {
@@ -84,22 +94,27 @@ class SplashActivity : ComponentActivity() {
 
                 }
                 delay(1500L) // wait a bit for data to populate
-                startActivity(Intent(this@SplashActivity, OnBoardingActivity::class.java))
-                finish()
+
+                // Navigate based on login status and role
+                navigateHome(this@SplashActivity)
+
             } else {
                 Toast.makeText(
                     this@SplashActivity,
                     "No internet connection. Please try again.",
                     Toast.LENGTH_LONG
                 ).show()
+                // If no internet, close the app after the toast duration
+                delay(3000L)
+                finish()
             }
         }
 
         Box(
-            modifier = Modifier.Companion
+            modifier = Modifier
                 .fillMaxSize()
                 .background(
-                    brush = Brush.Companion.verticalGradient(
+                    brush = Brush.verticalGradient(
                         colors = listOf(
                             Color(0xFF6A1B9A),
                             Color(0xFF8E24AA),
@@ -107,29 +122,54 @@ class SplashActivity : ComponentActivity() {
                         )
                     )
                 ),
-            contentAlignment = Alignment.Companion.Center
+            contentAlignment = Alignment.Center
         ) {
             Column(
-                horizontalAlignment = Alignment.Companion.CenterHorizontally,
+                horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
                 Icon(
                     imageVector = Icons.Filled.Quiz,
                     contentDescription = "Quiz App Logo",
-                    modifier = Modifier.Companion
+                    modifier = Modifier
                         .size(120.dp)
                         .scale(scaleAnimation),
-                    tint = Color.Companion.White
+                    tint = Color.White
                 )
-                Spacer(modifier = Modifier.Companion.height(24.dp))
+                Spacer(modifier = Modifier.height(24.dp))
                 Text(
-                    text = "QuizApp",
-                    color = Color.Companion.White.copy(alpha = alphaAnimation),
+                    text = "Srijan Quiz App",
+                    color = Color.White.copy(alpha = alphaAnimation),
                     fontSize = 40.sp,
-                    fontWeight = FontWeight.Companion.Bold
+                    fontWeight = FontWeight.Bold
                 )
             }
         }
+    }
+
+    // NEW: Function to handle navigation based on shared preferences (isLoggedIn and Role)
+    private fun navigateHome(context: Context) {
+        // Use a consistent name for shared preferences storage
+        val prefs = context.getSharedPreferences("SrijanQuizApp", Context.MODE_PRIVATE)
+
+        // 1. Retrieve stored values. Default role is empty string, default isLoggedIn is false.
+        val isLoggedIn = prefs.getBoolean("isLoggedIn", false)
+        val role = prefs.getString("Role", "")
+
+        val targetActivity: Class<*> = when {
+            // Rule 1: If logged in AND role is admin -> Admin Home
+            isLoggedIn && (role.equals("admin", ignoreCase = true)||role.equals("staff",ignoreCase = true)) -> AdminHomeActivity::class.java
+
+            // Rule 2: If logged in AND role is student -> Student Home
+            isLoggedIn && role.equals("student", ignoreCase = true) -> StudentHomeActivity::class.java
+
+            // Rule 3 (Default/Fallback): If not logged in or role is unknown -> OnBoarding
+            else -> OnBoardingActivity::class.java
+        }
+
+        context.startActivity(Intent(context, targetActivity))
+        // Finish the splash screen activity so the user cannot navigate back to it
+        (context as Activity).finish()
     }
 
     private fun isInternetAvailable(context: Context): Boolean {

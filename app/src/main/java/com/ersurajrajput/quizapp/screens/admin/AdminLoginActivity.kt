@@ -1,31 +1,16 @@
 package com.ersurajrajput.quizapp.screens.admin
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -34,7 +19,68 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ersurajrajput.quizapp.screens.admin.ui.theme.QuizAppTheme
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
+import android.util.Log
+import com.ersurajrajput.quizapp.models.StaffModel
+import com.ersurajrajput.quizapp.screens.admin.AdminHomeActivity // Import for navigation
 
+// ----------------------------
+// REPO (Corrected for Admin Login)
+// ----------------------------
+class StaffRepo {
+
+    fun findStaffByIdAndPass(
+        email: String,
+        pass: String,
+        onSuccess: (StaffModel) -> Unit,
+        onResult: (Boolean, String) -> Unit
+    ) {
+        val db = FirebaseFirestore.getInstance()
+        val trimmedEmail = email.trim()
+        val trimmedPass = pass.trim()
+
+        // --- FIX APPLIED HERE ---
+        // 1. Corrected collection name from "staf" to "staffs"
+        // 2. Corrected field names from "id" and "pass" to "email" and "password"
+        db.collection("staffs")
+            .whereEqualTo("email", trimmedEmail)
+            .whereEqualTo("password", trimmedPass)
+            .get()
+            .addOnSuccessListener { querySnapshot: QuerySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val staff = querySnapshot.documents[0].toObject(StaffModel::class.java)
+                    if (staff != null) {
+                        onSuccess(staff)
+                        onResult(true, "Login successful")
+                    } else {
+                        onResult(false, "Invalid staff data")
+                    }
+                } else {
+                    onResult(false, "No staff found with provided credentials")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("Firestore", "Error querying staff", exception)
+                onResult(false, "Error: ${exception.message}")
+            }
+    }
+}
+
+// ----------------------------
+// SESSION SAVE
+// ----------------------------
+fun saveSession(context: Context, isLoggedIn: Boolean, role: String) {
+    val prefs = context.getSharedPreferences("SrijanQuizApp", Context.MODE_PRIVATE)
+    prefs.edit()
+        .putBoolean("isLoggedIn", isLoggedIn)
+        .putString("Role", role)
+        .apply()
+}
+
+// ----------------------------
+// MAIN SCREEN
+// ----------------------------
 class AdminLoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,10 +102,16 @@ fun AdminLoginScreen(modifier: Modifier = Modifier) {
     var emailError by remember { mutableStateOf<String?>(null) }
     var passwordError by remember { mutableStateOf<String?>(null) }
     var showDialog by remember { mutableStateOf(false) }
+    var loading by remember { mutableStateOf(false) }
+
     val context = LocalContext.current
 
     fun validateForm(): Boolean {
-        emailError = if (email.isBlank()) "Email cannot be empty" else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) "Invalid email format" else null
+        emailError = if (email.isBlank()) "Email cannot be empty"
+        else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches())
+            "Invalid email format"
+        else null
+
         passwordError = if (password.isBlank()) "Password cannot be empty" else null
         return emailError == null && passwordError == null
     }
@@ -107,20 +159,38 @@ fun AdminLoginScreen(modifier: Modifier = Modifier) {
         Button(
             onClick = {
                 if (validateForm()) {
-                    if (email == "admin@gmail.com" && password == "admin") {
-                        var intent = Intent(context, AdminHomeActivity::class.java)
-                        context.startActivity(intent)
+                    loading = true
+                    StaffRepo().findStaffByIdAndPass(
+                        email = email,
+                        pass = password, // Note: pass parameter is used to query the password field
+                        onSuccess = { staff ->
+                            // 1. Save session with successful login and the correct role
+                            saveSession(context, true, staff.role.ifEmpty { "Admin" })
 
-                        Toast.makeText(context, "Login Success", Toast.LENGTH_SHORT).show()
-                        // TODO: Navigate to Admin Dashboard
-                    } else {
-                        showDialog = true
-                    }
+                            // 2. Navigate
+                            val intent = Intent(context, AdminHomeActivity::class.java).apply {
+                                // Clear the login activity from the back stack
+                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            }
+                            context.startActivity(intent)
+                            Toast.makeText(context, "Welcome ${staff.name}", Toast.LENGTH_SHORT).show()
+                            loading = false
+                        },
+                        onResult = { success, message ->
+                            loading = false
+                            if (!success) {
+                                // Show dialog and toast only on failure
+                                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                                showDialog = true
+                            }
+                        }
+                    )
                 }
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !loading
         ) {
-            Text("Login")
+            Text(if (loading) "Logging in..." else "Login")
         }
     }
 
