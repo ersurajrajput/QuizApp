@@ -64,10 +64,11 @@ class BasketBallGameActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
 
     // UI Colors
+    // Using lazy initialization for colors is good for avoiding context issues, but ensure R.color is available
     private val CORRECT_COLOR by lazy { ContextCompat.getColor(this, R.color.correct_green) }
     private val INCORRECT_COLOR by lazy { ContextCompat.getColor(this, R.color.wrong_red) }
     private val DEFAULT_CARD_BG = Color.WHITE
-    private val DEFAULT_STROKE_COLOR by lazy { ContextCompat.getColor(this, R.color.card_default_stroke) }
+    // DEFAULT_STROKE_COLOR was removed as it referenced an undeclared class and was not used in the game logic.
 
     // Timings
     private val DIALOG_DURATION_MS = 1500L
@@ -83,11 +84,6 @@ class BasketBallGameActivity : AppCompatActivity() {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         binding = ActivityBasketBallGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // Ensure the buttons are not visible as they are no longer used.
-        // It's best practice to also set them to `android:visibility="gone"` in your XML layout.
-        binding.btnSubmit.visibility = View.GONE
-        binding.btnNext.visibility = View.GONE
 
         gamesRepo = GamesRepo()
         setupSoundPool()
@@ -109,6 +105,7 @@ class BasketBallGameActivity : AppCompatActivity() {
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
             .build()
         soundPool = SoundPool.Builder().setMaxStreams(2).setAudioAttributes(audioAttributes).build()
+        // Assuming R.raw.excellent and R.raw.common_u_can_do_batter_than_that exist
         correctSoundId = soundPool.load(this, R.raw.excellent, 1)
         incorrectSoundId = soundPool.load(this, R.raw.common_u_can_do_batter_than_that, 1)
     }
@@ -121,14 +118,16 @@ class BasketBallGameActivity : AppCompatActivity() {
         val optionCards = listOf(binding.option1Card, binding.option2Card, binding.option3Card, binding.option4Card)
         val optionCheckBoxes = listOf(binding.option1, binding.option2, binding.option3, binding.option4)
 
-        optionCheckBoxes.forEach { it.isClickable = false }
+        optionCheckBoxes.forEach { it.isClickable = false } // Checkboxes are controlled by card click
 
         optionCards.forEachIndexed { index, card ->
             card.setOnClickListener {
-                selectedOptionIndex = index
+                // Set visual state immediately
                 optionCheckBoxes.forEachIndexed { cbIndex, checkBox ->
                     checkBox.isChecked = index == cbIndex
                 }
+                // Update internal state and submit
+                selectedOptionIndex = index
                 handleAnswerSubmission()
             }
         }
@@ -167,10 +166,8 @@ class BasketBallGameActivity : AppCompatActivity() {
     }
 
     private fun setupOptions(question: GameQuestion) {
-        // Show the static boy image at the start of each question
-        binding.ivBoy.visibility = View.VISIBLE
-        // Load a default static image. Assumes you have 'basket_boy.png' in drawables.
-        Glide.with(this).load(R.drawable.basket_boy).into(binding.ivBoy)
+        // Load a default static image.
+
 
         selectedOptionIndex = null
         val optionCards = listOf(binding.option1Card, binding.option2Card, binding.option3Card, binding.option4Card)
@@ -180,30 +177,40 @@ class BasketBallGameActivity : AppCompatActivity() {
             question.options.getOrNull(index)?.let { option ->
                 optionCheckBoxes[index].text = option.text
                 card.visibility = View.VISIBLE
-                card.strokeColor = DEFAULT_STROKE_COLOR
+
+                // Reset colors and state
                 card.setCardBackgroundColor(DEFAULT_CARD_BG)
-                card.isEnabled = true
+                card.isEnabled = true // Re-enable clicks
                 optionCheckBoxes[index].isChecked = false
             } ?: run { card.visibility = View.GONE }
         }
     }
 
+    /**
+     * Uses safe calls to ensure index is not null before proceeding.
+     */
     private fun handleAnswerSubmission() {
-        if (selectedOptionIndex == null) return
+        // Use a safe check for selectedOptionIndex
+        val index = selectedOptionIndex ?: return
 
+        // Disable all option cards immediately after selection
         listOf(binding.option1Card, binding.option2Card, binding.option3Card, binding.option4Card).forEach { it.isEnabled = false }
 
         val currentQuestion = gameModel?.questions?.getOrNull(currentQuestionIndex) ?: return
-        val selectedOption = currentQuestion.options.getOrNull(selectedOptionIndex!!) ?: return
+        val selectedOption = currentQuestion.options.getOrNull(index) ?: return
         val isCorrect = selectedOption.correct
 
-        // New flow: Play animation first, then proceed with feedback
+        // Play animation first, then proceed with feedback
         playGifAnimation(isCorrect)
     }
 
     private fun playGifAnimation(isCorrect: Boolean) {
-        binding.ivBoy.visibility = View.VISIBLE
-        val gifResource = if (isCorrect) R.drawable.basket_correct else R.drawable.basket_wrong
+        val gifResource = if (isCorrect) R.drawable.b_correct else R.drawable.b_wrong
+        val staticFallback = R.drawable.basket_bg // Fallback if GIF fails
+
+        // *** FIX for "two boys" issue: Clear the ImageView before loading the GIF
+        // This ensures the previous static image is completely removed.
+        Glide.with(this).clear(binding.ivBoy)
 
         Glide.with(this)
             .asGif()
@@ -215,25 +222,24 @@ class BasketBallGameActivity : AppCompatActivity() {
                     target: Target<GifDrawable>,
                     isFirstResource: Boolean
                 ): Boolean {
-                    // Fallback to original flow if GIF fails.
-                    // No handler.post needed as Glide listeners run on the main thread.
-                    binding.ivBoy.visibility = View.GONE
+                    // Fallback to static image and proceed with feedback
+                    Glide.with(this@BasketBallGameActivity).load(staticFallback).into(binding.ivBoy)
                     proceedWithFeedback(isCorrect)
                     return false
                 }
 
                 override fun onResourceReady(resource: GifDrawable, model: Any, target: Target<GifDrawable>, dataSource: DataSource, isFirstResource: Boolean): Boolean {
                     resource.setLoopCount(1)
+                    resource.start() // Explicitly start the GIF
                     resource.registerAnimationCallback(object : Animatable2Compat.AnimationCallback() {
                         override fun onAnimationEnd(drawable: Drawable?) {
                             super.onAnimationEnd(drawable)
-                            // Call proceedWithFeedback directly.
-                            // Listeners for Glide and Animatable2Compat run on the main thread,
-                            // so a handler is not necessary and could introduce a slight delay.
+                            // Once animation ends, load static image back and proceed
+                            Glide.with(this@BasketBallGameActivity).load(staticFallback).into(binding.ivBoy)
                             proceedWithFeedback(isCorrect)
                         }
                     })
-                    return false
+                    return false // Let Glide handle the drawing of the GIF
                 }
             })
             .into(binding.ivBoy)
@@ -249,7 +255,9 @@ class BasketBallGameActivity : AppCompatActivity() {
         }, DIALOG_DURATION_MS)
     }
 
-
+    /**
+     * Displays a simple dialog with "Correct!" or "Wrong Answer".
+     */
     private fun showFeedbackDialog(isCorrect: Boolean): Dialog {
         val dialog = Dialog(this)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -260,6 +268,7 @@ class BasketBallGameActivity : AppCompatActivity() {
             gravity = Gravity.CENTER
             setPadding(60, 50, 60, 50)
             setTextColor(Color.BLACK)
+            // Assuming R.drawable.popup_bg exists for styling
             setBackgroundResource(R.drawable.popup_bg)
         }
 
@@ -269,18 +278,28 @@ class BasketBallGameActivity : AppCompatActivity() {
         return dialog
     }
 
+    /**
+     * Updates score and highlights cards after the feedback dialog is dismissed.
+     */
     private fun postPopupActions(isCorrect: Boolean) {
-        val selectedIndex = selectedOptionIndex!!
-        val currentQuestion = gameModel?.questions?.getOrNull(currentQuestionIndex) ?: return
+        // Safely get selected index and question, returning if null
+        val selectedIndex = selectedOptionIndex
+        val currentQuestion = gameModel?.questions?.getOrNull(currentQuestionIndex)
+        if (selectedIndex == null || currentQuestion == null) return
+
         val optionCards = listOf(binding.option1Card, binding.option2Card, binding.option3Card, binding.option4Card)
 
         if (isCorrect) {
             score++
             binding.tvScore.text = score.toString()
             optionCards[selectedIndex].setCardBackgroundColor(CORRECT_COLOR)
+            // Add animation for correct answer (rotation)
             optionCards[selectedIndex].animate().rotationBy(360f).setDuration(500).start()
         } else {
+            // Highlight selected wrong answer as incorrect
             optionCards[selectedIndex].setCardBackgroundColor(INCORRECT_COLOR)
+
+            // Reveal correct answer
             val correctIndex = currentQuestion.options.indexOfFirst { it.correct }
             if (correctIndex != -1) {
                 optionCards[correctIndex].setCardBackgroundColor(CORRECT_COLOR)
@@ -297,11 +316,8 @@ class BasketBallGameActivity : AppCompatActivity() {
         displayQuestion()
     }
 
-
-
     private fun endGame() {
         // Hide all game UI elements for a clean exit sequence
-        binding.ivBoy.visibility = View.GONE
         binding.tvQuestion.visibility = View.INVISIBLE
         listOf(binding.option1Card, binding.option2Card, binding.option3Card, binding.option4Card).forEach {
             it.visibility = View.GONE
@@ -320,7 +336,8 @@ class BasketBallGameActivity : AppCompatActivity() {
         val dialog = Dialog(this)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        val finalScoreText = "🎯 Game Over!\nYour Score: $score / ${gameModel?.questions?.size}"
+        val totalQuestions = gameModel?.questions?.size ?: 0
+        val finalScoreText = "🎯 Game Over!\nYour Score: $score / $totalQuestions"
 
         val textView = TextView(this).apply {
             text = finalScoreText
@@ -328,6 +345,7 @@ class BasketBallGameActivity : AppCompatActivity() {
             gravity = Gravity.CENTER
             setPadding(80, 70, 80, 70)
             setTextColor(Color.BLACK)
+            // Assuming R.drawable.popup_bg exists for styling
             setBackgroundResource(R.drawable.popup_bg)
         }
 
@@ -338,9 +356,10 @@ class BasketBallGameActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        soundPool.release()
+        if (::soundPool.isInitialized) {
+            soundPool.release()
+        }
         // This is crucial to prevent memory leaks or crashes if the user exits while a delay is pending
         handler.removeCallbacksAndMessages(null)
     }
 }
-

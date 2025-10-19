@@ -190,7 +190,6 @@ class ArrowGameActivity : AppCompatActivity() {
 
     private fun playGifAnimation(isCorrect: Boolean) {
         val gifResource = if (isCorrect) R.drawable.final_arrow_correct else R.drawable.final_arrow_wrong
-
         Glide.with(this)
             .asGif()
             .load(gifResource)

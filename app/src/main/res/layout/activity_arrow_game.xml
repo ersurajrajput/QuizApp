@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_arrow"
+    android:background="@drawable/final_boy"
     tools:context=".screens.student.activity.games.ArrowGameActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,15 +14,35 @@
         android:layout_height="match_parent"
         android:id="@+id/container"
         android:elevation="5dp">
+        <ImageView
+            android:id="@+id/ivBack"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="30dp"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            app:layout_constraintHorizontal_bias="1"
+            android:scaleType="fitXY"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="5dp"
+            app:srcCompat="@drawable/wodden_back_btn" />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
         <!-- Score Board -->
         <ImageView
             android:id="@+id/imageView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/score_board"
+            app:layout_constraintVertical_bias="0"
+            android:layout_marginTop="30dp"
             app:layout_constraintBottom_toTopOf="@+id/imageView2"
             app:layout_constraintEnd_toEndOf="@+id/imageView2"
-            app:layout_constraintStart_toStartOf="@id/imageView2" />
+            app:layout_constraintStart_toStartOf="@id/imageView2"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvScore"
@@ -39,8 +59,8 @@
         <!-- Wooden Board Background -->
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="600dp"
-            android:layout_height="270dp"
+            android:layout_width="500dp"
+            android:layout_height="200dp"
             android:scaleType="fitXY"
             android:src="@drawable/wodden_board"
             android:translationY="20dp"
@@ -52,8 +72,10 @@
         <!-- Question Card -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/questionCard"
-            android:layout_width="500dp"
-            android:layout_height="70dp"
+            android:layout_width="0dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_height="40dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="4dp"
             app:cardBackgroundColor="#FFFFFF"
@@ -80,7 +102,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/option1Card"
             android:layout_width="200dp"
-            android:layout_height="60dp"
+            android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:background="#FFFFFF"
             android:paddingStart="0dp"
@@ -107,7 +129,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/option2Card"
             android:layout_width="200dp"
-            android:layout_height="60dp"
+            android:layout_height="40dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
             android:background="#FFFFFF"
@@ -138,7 +160,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/option3Card"
             android:layout_width="200dp"
-            android:layout_height="60dp"
+            android:layout_height="40dp"
             android:layout_marginTop="8dp"
             android:background="#FFFFFF"
             android:paddingStart="0dp"
@@ -166,7 +188,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/option4Card"
             android:layout_width="200dp"
-            android:layout_height="60dp"
+            android:layout_height="40dp"
             android:layout_marginTop="8dp"
             android:background="#FFFFFF"
             android:paddingStart="0dp"
@@ -220,10 +242,10 @@
 
     <ImageView
         android:id="@+id/ivBoy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:elevation="50dp"
-      
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="1dp"
+        android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -233,20 +255,6 @@
 
 
 
-    <ImageView
-        android:id="@+id/ivBack"
 
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:scaleType="fitXY"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="5dp"
-        app:srcCompat="@drawable/wodden_back_btn" />
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

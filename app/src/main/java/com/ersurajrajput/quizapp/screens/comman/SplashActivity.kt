@@ -48,6 +48,7 @@ import kotlinx.coroutines.launch
 // Assumed imports for target activities based on typical project structure
 import com.ersurajrajput.quizapp.screens.admin.AdminHomeActivity
 import com.ersurajrajput.quizapp.screens.student.StudentHomeActivity
+import com.ersurajrajput.quizapp.screens.student.activity.games.ArrowGameActivity
 
 
 class SplashActivity : ComponentActivity() {
@@ -96,7 +97,11 @@ class SplashActivity : ComponentActivity() {
                 delay(1500L) // wait a bit for data to populate
 
                 // Navigate based on login status and role
-                navigateHome(this@SplashActivity)
+//                navigateHome(this@SplashActivity)
+                var intent = Intent(this@SplashActivity, OnBoardingActivity::class.java)
+//                intent.putExtra("GAME_ID","ftsZ97mL7R5AjV6TgrSy")
+                startActivity(intent)
+                finish()
 
             } else {
                 Toast.makeText(
