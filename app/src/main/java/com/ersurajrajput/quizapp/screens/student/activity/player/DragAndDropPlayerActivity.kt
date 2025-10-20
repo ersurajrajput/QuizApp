@@ -56,16 +56,11 @@ class DragAndDropPlayerActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         // --- HIDE STATUS BAR LOGIC ---
-        // Ensure the content extends into the system bar areas
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-
-        // Hide the status bar
-        val controller = WindowInsetsControllerCompat(window, window.decorView)
-        controller.hide(WindowInsetsCompat.Type.statusBars())
-        // Optional: Define behavior for when bars are hidden (e.g., they reappear on swipe)
-        controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        // --- END HIDE STATUS BAR LOGIC ---
-
+        val windowInsetsController =
+            WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
         enableEdgeToEdge()
         val activityId = intent.getStringExtra("ID")
         setContent {

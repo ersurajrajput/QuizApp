@@ -17,6 +17,7 @@ import android.view.WindowManager
 import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
@@ -66,7 +67,7 @@ class ArrowGameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityArrowGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        enableEdgeToEdge()
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         // Hide buttons as they are no longer used

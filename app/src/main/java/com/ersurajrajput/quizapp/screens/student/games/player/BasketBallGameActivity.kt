@@ -16,6 +16,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
@@ -84,7 +85,7 @@ class BasketBallGameActivity : AppCompatActivity() {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         binding = ActivityBasketBallGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        enableEdgeToEdge()
         gamesRepo = GamesRepo()
         setupSoundPool()
         setupButtonClickListeners()

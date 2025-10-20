@@ -11,7 +11,7 @@ import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
 import android.view.Window
-import android.view.WindowManager // ADDED: Required for FLAG_FULLSCREEN
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -21,6 +21,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.ersurajrajput.quizapp.R
@@ -42,20 +43,15 @@ class FillIntheBlankActivity : AppCompatActivity() {
     private lateinit var frontTextViews: List<TextView>
     private lateinit var endTextViews: List<TextView>
     private lateinit var answerEditTexts: List<EditText>
-    private lateinit var submitButton: androidx.appcompat.widget.AppCompatButton
-    private lateinit var nextButton: androidx.appcompat.widget.AppCompatButton
+    private lateinit var optionTextViews: List<TextView>
+    private var optionsContainer: LinearLayout? = null // MODIFIED: Changed to nullable to prevent crash
+    private lateinit var submitButton: AppCompatButton
+    private lateinit var nextButton: AppCompatButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // START: Added to hide status bar (full screen mode)
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
-        // END: Added to hide status bar
-
         enableEdgeToEdge()
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_fill_inthe_blank)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -81,11 +77,12 @@ class FillIntheBlankActivity : AppCompatActivity() {
     }
 
     fun backBtn(){
-        var btn = findViewById<ImageView>(R.id.btnBack)
+        val btn = findViewById<ImageView>(R.id.btnBack)
         btn.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
     }
+
     private fun initViews() {
         tvQuestionTitle = findViewById(R.id.tvQuestionTitle)
         submitButton = findViewById(R.id.submitButton)
@@ -116,7 +113,15 @@ class FillIntheBlankActivity : AppCompatActivity() {
             findViewById(R.id.etAnswer4)
         )
 
-        // Add TextWatcher to enable/disable buttons
+        optionsContainer = findViewById(R.id.optionsContainer)
+        optionTextViews = listOf(
+            findViewById(R.id.option1),
+            findViewById(R.id.option2),
+            findViewById(R.id.option3),
+            findViewById(R.id.option4)
+        )
+
+
         answerEditTexts.forEach {
             it.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -145,18 +150,28 @@ class FillIntheBlankActivity : AppCompatActivity() {
         tvQuestionTitle.text = quiz.title
 
         val questionsOnPage = getCurrentPageQuestions()
+        val correctAnswers = questionsOnPage.map { it.ans.trim() }.shuffled() // Get answers and shuffle them
 
-        // Hide all rows initially
         questionRows.forEach { it.visibility = View.GONE }
+        optionTextViews.forEach { it.visibility = View.GONE }
 
-        // Populate rows with the current page's questions
+        // Make the options container visible to show the word bank
+        optionsContainer?.visibility = View.VISIBLE
+
+        // Populate the option TextViews with shuffled answers (word bank)
+        correctAnswers.forEachIndexed { index, answer ->
+            if (index < optionTextViews.size) {
+                optionTextViews[index].text = answer
+                optionTextViews[index].visibility = View.VISIBLE
+            }
+        }
+
         questionsOnPage.forEachIndexed { index, question ->
             questionRows[index].visibility = View.VISIBLE
             val parts = question.text.split("____")
             frontTextViews[index].text = parts.getOrNull(0) ?: ""
             endTextViews[index].text = if (parts.size > 1) parts[1] else ""
 
-            // Reset EditText state
             answerEditTexts[index].apply {
                 setText("")
                 isEnabled = true
@@ -167,7 +182,6 @@ class FillIntheBlankActivity : AppCompatActivity() {
         submitButton.isEnabled = false
         nextButton.isEnabled = false
 
-        // Update Next button text
         val totalPages = (quiz.questions.size + questionsPerPage - 1) / questionsPerPage
         if (currentPage >= totalPages - 1) {
             nextButton.text = "Finish"
@@ -195,7 +209,7 @@ class FillIntheBlankActivity : AppCompatActivity() {
             val userAnswer = answerEditTexts[index].text.toString().trim()
             val correctAnswer = question.ans.trim()
 
-            answerEditTexts[index].isEnabled = false // Disable after checking
+            answerEditTexts[index].isEnabled = false
             if (userAnswer.equals(correctAnswer, ignoreCase = true)) {
                 score++
                 correctOnPage++
@@ -204,6 +218,7 @@ class FillIntheBlankActivity : AppCompatActivity() {
                 answerEditTexts[index].backgroundTintList = ColorStateList.valueOf(Color.RED)
             }
         }
+
         submitButton.isEnabled = false
         nextButton.isEnabled = true
 
@@ -296,3 +311,4 @@ class FillIntheBlankActivity : AppCompatActivity() {
         return if (start < end) questions.subList(start, end) else emptyList()
     }
 }
+

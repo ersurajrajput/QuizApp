@@ -9,7 +9,9 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.view.Window
+import android.view.WindowManager
 import android.widget.*
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -38,7 +40,11 @@ class TrueFalseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        hideSystemBars()
+
+        // END: Added to hide status bar
+
+        enableEdgeToEdge()
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_true_false)
 
         initializeViews()

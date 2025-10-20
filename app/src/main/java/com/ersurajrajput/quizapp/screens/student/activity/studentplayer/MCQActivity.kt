@@ -8,12 +8,14 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.view.Window
+import android.view.WindowManager
 import android.widget.CheckBox
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -35,9 +37,10 @@ class MCQActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         binding = ActivityMcqactivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        hideSystemBars()
 
         val activityId = intent.getStringExtra("ID")
         if (activityId == null) {
@@ -57,8 +60,9 @@ class MCQActivity : AppCompatActivity() {
         setupClickListeners()
         backBtn()
     }
+
     fun backBtn(){
-        var btn = findViewById<ImageView>(R.id.btnBack)
+        val btn = findViewById<ImageView>(R.id.btnBack)
         btn.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
@@ -92,6 +96,11 @@ class MCQActivity : AppCompatActivity() {
             if (index < model.qList.size) {
                 val question = model.qList[index]
                 clearCheckBoxes()
+
+                // START: MODIFICATION - Make next button invisible
+                binding.nextButton.visibility = View.INVISIBLE
+                // END: MODIFICATION
+
                 binding.questionTextView.text = question.qTitle
                 binding.progressTextView.text = "${index + 1} of ${model.qList.size}"
 
@@ -133,6 +142,10 @@ class MCQActivity : AppCompatActivity() {
             }
 
             showResultDialog(isCorrect)
+
+            // START: MODIFICATION - Show next button
+            binding.nextButton.visibility = View.VISIBLE
+            // END: MODIFICATION
         }
 
         binding.nextButton.setOnClickListener {

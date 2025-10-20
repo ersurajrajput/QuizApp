@@ -52,12 +52,10 @@ import com.ersurajrajput.quizapp.screens.student.activity.games.ArrowGameActivit
 
 
 class SplashActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 //        DummyRepo().populateFillInTheBlanks()
-
         setContent {
             QuizAppTheme {
                 SplashScreen()
@@ -87,7 +85,6 @@ class SplashActivity : ComponentActivity() {
         LaunchedEffect(key1 = true) {
             startAnimation = true
             delay(1500L) // wait for initial animation
-
             // Check internet before moving forward
             if (isInternetAvailable(this@SplashActivity)) {
                 // Optionally, populate MCQActivity
@@ -97,10 +94,10 @@ class SplashActivity : ComponentActivity() {
                 delay(1500L) // wait a bit for data to populate
 
                 // Navigate based on login status and role
-//                navigateHome(this@SplashActivity)
-                var intent = Intent(this@SplashActivity, OnBoardingActivity::class.java)
-//                intent.putExtra("GAME_ID","ftsZ97mL7R5AjV6TgrSy")
-                startActivity(intent)
+                navigateHome(this@SplashActivity)
+//                var intent = Intent(this@SplashActivity, OnBoardingActivity::class.java)
+////                intent.putExtra("GAME_ID","ftsZ97mL7R5AjV6TgrSy")
+//                startActivity(intent)
                 finish()
 
             } else {

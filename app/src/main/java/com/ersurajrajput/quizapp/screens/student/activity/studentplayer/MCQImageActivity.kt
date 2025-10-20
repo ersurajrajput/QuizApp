@@ -3,6 +3,7 @@ package com.ersurajrajput.quizapp.screens.student.activity.studentplayer
 import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -13,9 +14,10 @@ import com.ersurajrajput.quizapp.R
 import com.ersurajrajput.quizapp.databinding.ActivityMcqimageBinding
 import com.ersurajrajput.quizapp.models.ImageMCQModel
 import com.ersurajrajput.quizapp.repo.ImageMcqRepo
-import android.view.Gravity // ADDED: Required for centering text
-import android.widget.TextView // ADDED: Required for creating a custom centered title
-import android.view.WindowManager // ADDED: Required for FLAG_FULLSCREEN
+import android.view.Gravity
+import android.widget.TextView
+import android.view.WindowManager
+import androidx.activity.enableEdgeToEdge
 
 class MCQImageActivity : AppCompatActivity() {
 
@@ -26,19 +28,12 @@ class MCQImageActivity : AppCompatActivity() {
     private var currentQuestionIndex = 0
     private var selectedOptionIndex: Int? = null
     private var score = 0
-
-    // To prevent checking the same answer multiple times and adding to the score.
     private var isAnswerSubmittedForCurrentQuestion = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // START: Added to hide status bar (full screen mode)
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
-        // END: Added to hide status bar
+        enableEdgeToEdge()
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         binding = ActivityMcqimageBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -66,39 +61,25 @@ class MCQImageActivity : AppCompatActivity() {
         binding.option4CheckBox.setOnClickListener { onOptionSelected(3) }
 
         binding.nextButton.setOnClickListener {
-            if (selectedOptionIndex == null) {
-                Toast.makeText(this, "Please select an option", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            // This function now handles showing the result dialog before executing the next step.
-            handleAnswerSubmission {
-                // This block is the 'onContinue' action, which runs after the dialog is dismissed.
-                if (currentQuestionIndex < (mcqModel?.questions?.size ?: 0) - 1) {
-                    currentQuestionIndex++
-                    selectedOptionIndex = null
-                    resetOptions()
-                    showQuestion()
-                } else {
-                    Toast.makeText(this, "Quiz Completed! Score: $score", Toast.LENGTH_LONG).show()
-                    finish()
-                }
+            if (currentQuestionIndex < (mcqModel?.questions?.size ?: 0) - 1) {
+                currentQuestionIndex++
+                selectedOptionIndex = null
+                resetOptions()
+                showQuestion()
+            } else {
+                Toast.makeText(this, "Quiz Completed! Score: $score", Toast.LENGTH_LONG).show()
+                finish()
             }
         }
 
         binding.submitButton.setOnClickListener {
-            if (selectedOptionIndex == null) {
-                Toast.makeText(this, "Please select an option", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            // The onContinue action is empty because we don't want to move to the next question.
             handleAnswerSubmission { /* Do nothing */ }
         }
         backBtn()
     }
+
     fun backBtn(){
-        var btn = findViewById<ImageView>(R.id.btnBack)
+        val btn = findViewById<ImageView>(R.id.btnBack)
         btn.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
@@ -106,8 +87,9 @@ class MCQImageActivity : AppCompatActivity() {
 
     private fun showQuestion() {
         val question = mcqModel?.questions?.get(currentQuestionIndex) ?: return
-        isAnswerSubmittedForCurrentQuestion = false // Reset for the new question
+        isAnswerSubmittedForCurrentQuestion = false
 
+        binding.nextButton.visibility = View.INVISIBLE // Hide next button for new question
         binding.questionTextView.text = question.text
         binding.progressTextView.text = "${currentQuestionIndex + 1} of ${mcqModel?.questions?.size}"
 
@@ -121,7 +103,7 @@ class MCQImageActivity : AppCompatActivity() {
         if (!url.isNullOrEmpty()) {
             Glide.with(this).load(url).into(imageView)
         } else {
-            imageView.setImageResource(android.R.color.darker_gray) // Placeholder for missing images
+            imageView.setImageResource(android.R.color.darker_gray)
         }
     }
 
@@ -142,6 +124,13 @@ class MCQImageActivity : AppCompatActivity() {
     }
 
     private fun handleAnswerSubmission(onContinue: () -> Unit) {
+        if (selectedOptionIndex == null) {
+            Toast.makeText(this, "Please select an option", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        binding.nextButton.visibility = View.VISIBLE // Show next button after submission
+
         val question = mcqModel?.questions?.get(currentQuestionIndex) ?: return
         val isCorrect = selectedOptionIndex == question.correctOptionIndex
 
@@ -157,49 +146,35 @@ class MCQImageActivity : AppCompatActivity() {
 
     private fun showResultDialog(isCorrect: Boolean, onContinue: () -> Unit) {
         val title: String
-        // In a real app, these would be R.raw.sound_file.
         val soundResId: Int
 
         if (isCorrect) {
             title = "Correct!"
-            // TODO: Ensure you have a sound file named 'excellent.mp3' in your res/raw folder.
             soundResId = R.raw.excellent
         } else {
             title = "Wrong Answer"
-            // TODO: Ensure you have a sound file named 'coomon_you_can_do_better_then_that.mp3' in your res/raw folder.
             soundResId = R.raw.common_u_can_do_batter_than_that
         }
 
-        // START OF TITLE CENTER FIX: Create a custom TextView and set its gravity to center.
-        // Changed gravity to Gravity.CENTER and adjusted vertical padding to push the text vertically.
         val titleTextView = TextView(this).apply {
             text = title
-            gravity = Gravity.CENTER // Center the text both horizontally and vertically
-            textSize = 24f // Increase font size for better visibility
+            gravity = Gravity.CENTER
+            textSize = 24f
             setTextColor(Color.BLACK)
-            // Increased top/bottom padding to give the title view more vertical space
             setPadding(40, 80, 40, 80)
         }
-        // END OF TITLE CENTER FIX
 
         val builder = AlertDialog.Builder(this)
-        builder.setCustomTitle(titleTextView) // Use the custom, centered TextView as the title
+        builder.setCustomTitle(titleTextView)
         builder.setCancelable(false)
-        // OK button removed as requested for auto-hide.
 
         val dialog = builder.create()
-
-        // Apply custom XML background
         val backgroundDrawable = ContextCompat.getDrawable(this, R.drawable.popup_bg)
         dialog.window?.setBackgroundDrawable(backgroundDrawable)
 
-        // Set onDismissListener to execute continuation logic (moving to next question/ending quiz).
-        // This is crucial now that there is no OK button.
         dialog.setOnDismissListener {
             onContinue()
         }
-
-        // Show the dialog
         dialog.show()
 
         var soundPlayed = false
@@ -207,7 +182,6 @@ class MCQImageActivity : AppCompatActivity() {
             val mediaPlayer = MediaPlayer.create(this, soundResId)
             if (mediaPlayer != null) {
                 mediaPlayer.setOnCompletionListener {
-                    // Sound finished, dismiss the dialog. onDismissListener will handle onContinue().
                     it.release()
                     if (dialog.isShowing) {
                         dialog.dismiss()
@@ -217,16 +191,14 @@ class MCQImageActivity : AppCompatActivity() {
                 soundPlayed = true
             }
         } catch (e: Exception) {
-            // This toast helps in debugging if the sound file is missing.
             Toast.makeText(this, "Error playing sound. Resource not found.", Toast.LENGTH_SHORT).show()
         }
 
-        // If sound failed to play (mediaPlayer was null or exception occurred), dismiss immediately.
         if (!soundPlayed) {
-            // Dismiss immediately. This will trigger onDismissListener, which calls onContinue().
             if (dialog.isShowing) {
                 dialog.dismiss()
             }
         }
     }
 }
+

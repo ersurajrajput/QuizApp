@@ -18,6 +18,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.ersurajrajput.quizapp.R
 import com.ersurajrajput.quizapp.databinding.ActivityUnscrambledWordsGameBinding
@@ -56,7 +57,7 @@ class UnscrambledWordsGameActivity : AppCompatActivity() {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         binding = ActivityUnscrambledWordsGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        enableEdgeToEdge()
         gamesRepo = GamesRepo()
         setupSoundPool()
         setupKeyboard()
