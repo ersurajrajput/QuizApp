@@ -18,6 +18,9 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.ersurajrajput.quizapp.R
 import com.ersurajrajput.quizapp.databinding.ActivitySpellBeeGameBinding
 import com.ersurajrajput.quizapp.repo.GamesRepo
@@ -62,6 +65,12 @@ class SpellBeeGameActivity : AppCompatActivity() {
         binding = ActivitySpellBeeGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
         enableEdgeToEdge()
+        val windowInsetsController =
+            WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+
         gamesRepo = GamesRepo()
         setupSoundPool()
         setupButtonClickListeners()

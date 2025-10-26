@@ -44,7 +44,11 @@ class TrueFalseActivity : AppCompatActivity() {
         // END: Added to hide status bar
 
         enableEdgeToEdge()
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        val windowInsetsController =
+            WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
         setContentView(R.layout.activity_true_false)
 
         initializeViews()

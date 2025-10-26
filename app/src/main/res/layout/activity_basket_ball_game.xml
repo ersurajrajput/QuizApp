@@ -74,6 +74,7 @@
       app:layout_constraintTop_toTopOf="@id/imageView3"
       app:layout_constraintEnd_toEndOf="@id/imageView3"
       app:cardCornerRadius="20dp"
+       app:cardBackgroundColor="@color/white"
        app:strokeColor="#03a4ff"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
@@ -113,6 +114,7 @@ android:layout_marginTop="30sp">
              app:layout_constraintStart_toStartOf="@id/questionCard"
              app:layout_constraintEnd_toEndOf="@id/questionCard"
              app:cardCornerRadius="20dp"
+             app:cardBackgroundColor="@color/white"
              app:strokeColor="#03a4ff"
              android:layout_marginTop="10dp">
             <CheckBox
@@ -138,6 +140,7 @@ android:layout_marginTop="30sp">
              app:layout_constraintEnd_toEndOf="@id/questionCard"
              app:cardCornerRadius="20dp"
              app:strokeColor="#03a4ff"
+             app:cardBackgroundColor="@color/white"
              android:layout_marginTop="10dp">
             <CheckBox
                 android:id="@+id/option2"
@@ -168,6 +171,7 @@ android:layout_marginTop="30sp">
              app:cardCornerRadius="20dp"
              app:strokeColor="#03a4ff"
              android:layout_marginEnd="20dp"
+             app:cardBackgroundColor="@color/white"
              android:layout_marginTop="10dp">
             <CheckBox
                 android:id="@+id/option3"
@@ -192,6 +196,7 @@ android:layout_marginTop="30sp">
              app:layout_constraintEnd_toEndOf="@id/questionCard"
              app:cardCornerRadius="20dp"
              app:strokeColor="#03a4ff"
+             app:cardBackgroundColor="@color/white"
              android:layout_marginTop="10dp">
             <CheckBox
                 android:id="@+id/option4"

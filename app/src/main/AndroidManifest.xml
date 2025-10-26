@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" >
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" /> <!-- For Android 14+ (Selected Photos Access) -->
     <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
 
@@ -15,13 +16,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.QuizApp" >
-
+        <activity
+            android:name=".screens.student.diagrams.DiagramPlayerActivity"
+            android:theme="@style/Theme.QuizAppTheme"
+            android:screenOrientation="landscape"
+            android:exported="false" />
         <activity
             android:name=".screens.student.activity.studentplayer.FillIntheBlankActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.QuizAppTheme" />
+            android:theme="@style/Theme.QuizAppTheme"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".screens.student.activity.studentplayer.MCQImageActivity"
             android:exported="false"
@@ -241,11 +246,6 @@
             android:label="@string/title_activity_diagram_management"
             android:theme="@style/Theme.QuizApp" />
         <activity
-            android:name=".screens.student.diagrams.DiagramPlayerActivity"
-            android:exported="false"
-            android:label="@string/title_activity_diagram_player"
-            android:theme="@style/Theme.QuizApp" />
-        <activity
             android:name=".screens.student.diagrams.DiagramSelectorActivity"
             android:exported="false"
             android:label="@string/title_activity_diagram_seletor"
@@ -279,11 +279,11 @@
             android:exported="false"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.QuizAppTheme" />
-         <activity
-         android:name=".screens.student.games.player.UnscrambledWordsGameActivity"
-         android:exported="false"
-             android:screenOrientation="landscape"
-         android:theme="@style/Theme.QuizAppTheme" />
+        <activity
+            android:name=".screens.student.games.player.UnscrambledWordsGameActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.QuizAppTheme" />
         <activity
             android:name=".screens.student.activity.games.BasketBallGameActivity"
             android:exported="false"

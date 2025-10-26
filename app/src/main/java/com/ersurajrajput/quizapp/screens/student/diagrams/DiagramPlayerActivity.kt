@@ -1,99 +1,43 @@
 package com.ersurajrajput.quizapp.screens.student.diagrams
 
-import android.annotation.SuppressLint
-import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import android.widget.ImageView
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.compose.ui.zIndex
-import com.ersurajrajput.quizapp.screens.student.diagrams.ui.theme.QuizAppTheme
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import com.ersurajrajput.quizapp.R
 
 class DiagramPlayerActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Force landscape for fullscreen effect
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-
-        val url = intent.getStringExtra("VIDEO_URL") ?: ""
-        val videoId = extractVideoId(url)
-
         enableEdgeToEdge()
-        setContent {
-            QuizAppTheme {
-                DiagramPlayerScreen(videoId = videoId)
-            }
+        setContentView(R.layout.activity_diagram_player)
+
+        val windowInsetsController =
+            WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+
+        var url = intent.getStringExtra("VIDEO_URL")?:""
+        val webView = findViewById<WebView>(R.id.webView)
+        val backbtn = findViewById<ImageView>(R.id.bakcBtn)
+        backbtn.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
         }
-    }
 
-    private fun extractVideoId(url: String): String? {
-        return when {
-            "v=" in url -> url.substringAfter("v=").substringBefore("&")
-            "youtu.be/" in url -> url.substringAfter("youtu.be/")
-            else -> null
-        }
-    }
-}
+        // Enable JavaScript if needed
+        webView.settings.javaScriptEnabled = true
 
-@SuppressLint("ContextCastToActivity")
-@Composable
-fun DiagramPlayerScreen(videoId: String?) {
-    val activity = LocalContext.current as ComponentActivity
+        // Keep links inside the WebView
+        webView.webViewClient = WebViewClient()
 
-    Box(modifier = Modifier.fillMaxSize()) {
-
-        // YouTube Player View
-        AndroidView(
-            modifier = Modifier
-                .fillMaxSize()
-                .zIndex(0f), // Keep below back button
-            factory = { context ->
-                val youTubePlayerView = YouTubePlayerView(context).apply {
-                    addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-                        override fun onReady(youTubePlayer: YouTubePlayer) {
-                            videoId?.let {
-                                youTubePlayer.loadVideo(it, 0f)
-                            }
-                        }
-                    })
-                    clipToOutline = false
-                }
-                activity.lifecycle.addObserver(youTubePlayerView)
-                youTubePlayerView
-            }
-        )
-
-//        // Back Button (Clickable now ✅)
-//        IconButton(
-//            onClick = { activity.finish() },
-//            modifier = Modifier
-//                .align(Alignment.TopStart)
-//                .padding(16.dp)
-//                .zIndex(2f) // Bring above the YouTubePlayerView
-//        ) {
-//            Icon(
-//                imageVector = Icons.Default.ArrowBack,
-//                contentDescription = "Go back",
-//                tint = Color.White
-//            )
-//        }
+        // Load your link
+          // replace with your URL
+        webView.loadUrl(url)
     }
 }

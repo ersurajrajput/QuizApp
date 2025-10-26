@@ -3,6 +3,7 @@ package com.ersurajrajput.quizapp.screens.student.activity.player
 import android.app.Activity
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -34,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
@@ -55,13 +57,14 @@ class DragAndDropPlayerActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // --- HIDE STATUS BAR LOGIC ---
+
+        enableEdgeToEdge()
         val windowInsetsController =
             WindowCompat.getInsetsController(window, window.decorView)
         windowInsetsController.systemBarsBehavior =
             WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
-        enableEdgeToEdge()
+
         val activityId = intent.getStringExtra("ID")
         setContent {
             MaterialTheme {
@@ -120,11 +123,49 @@ fun DragAndDropScreen(activityId: String) {
 
         // --- BACKGROUND IMAGE ---
         Image(
-            painter = painterResource(id = R.drawable.a_one_bg),
+            painter = painterResource(id = R.drawable.match_the_following_bg),
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier.matchParentSize()
         )
+        // START: MODIFIED GREEN BOX HEADER
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .background(Color(0xFF5CB85C)) // Green background color
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically, // Center items vertically in the row
+            horizontalArrangement = Arrangement.Start // Items start from the left
+        ) {
+            // 1. "Let's Analyze" Image (Start)
+            Image(
+                painter = painterResource(id = R.drawable.parrot), // **REPLACE with your actual drawable resource ID**
+                contentDescription = "Let's Analyze Icon",
+                modifier = Modifier.size(60.dp)
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            // 2. "Match the Following" Text (Middle)
+            Text(
+                text = "Drag and Drop",
+                color = Color.White,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier.weight(1f)) // Pushes the next item to the end
+
+            // 3. "Analyzing Skills" Text (Last)
+            Text(
+                text = "Analyzing Skills",
+                color = Color.White,
+                fontSize = 10.sp,
+                modifier = Modifier
+            )
+        }
+        // END: MODIFIED GREEN BOX HEADER
 
         // --- BACK BUTTON ---
         // Adopting the style and positioning from the MatchTheFollowingImagePlayerActivity for consistency
@@ -265,6 +306,7 @@ fun DragAndDropGame(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
+
         // Grid of images (drop targets) - Now centered within the game column
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),

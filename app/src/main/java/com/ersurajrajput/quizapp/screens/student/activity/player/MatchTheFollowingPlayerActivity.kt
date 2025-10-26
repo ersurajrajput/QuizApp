@@ -12,6 +12,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.magnifier
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -26,7 +27,9 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -158,6 +161,44 @@ fun MatchTheFollowingQuiz(quiz: MatchTheFollowingModel) {
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // START: MODIFIED GREEN BOX HEADER
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .background(Color(0xFF5CB85C)) // Green background color
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically, // Center items vertically in the row
+            horizontalArrangement = Arrangement.Start // Items start from the left
+        ) {
+            // 1. "Let's Analyze" Image (Start)
+            Image(
+                painter = painterResource(id = R.drawable.parrot), // **REPLACE with your actual drawable resource ID**
+                contentDescription = "Let's Analyze Icon",
+                modifier = Modifier.size(60.dp)
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            // 2. "Match the Following" Text (Middle)
+            Text(
+                text = "Match the Following",
+                color = Color.White,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier.weight(1f)) // Pushes the next item to the end
+
+            // 3. "Analyzing Skills" Text (Last)
+            Text(
+                text = "Analyzing Skills",
+                color = Color.White,
+                fontSize = 10.sp,
+                modifier = Modifier
+            )
+        }
+        // END: MODIFIED GREEN BOX HEADER
         // Game area
         Box(
             modifier = Modifier

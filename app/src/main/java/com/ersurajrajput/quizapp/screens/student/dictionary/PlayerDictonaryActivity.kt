@@ -1,8 +1,10 @@
 package com.ersurajrajput.quizapp.screens.student.dictionary
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -34,6 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.ersurajrajput.quizapp.models.DictionaryModel
@@ -51,6 +56,11 @@ class PlayerDictonaryActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         enableEdgeToEdge()
+        val windowInsetsController =
+            WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
 
         val gameId = intent.getStringExtra("GAME_ID")
 
@@ -102,6 +112,7 @@ fun PlayerDictionaryScreen(gameId: String) {
     }
 }
 
+@SuppressLint("ContextCastToActivity")
 @Composable
 fun PlayerDictionaryContent(dictionary: DictionaryModel) {
     val vocabulary = dictionary.vocabularyWord

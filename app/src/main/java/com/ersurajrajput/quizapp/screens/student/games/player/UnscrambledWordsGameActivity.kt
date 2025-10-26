@@ -20,6 +20,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.ersurajrajput.quizapp.R
 import com.ersurajrajput.quizapp.databinding.ActivityUnscrambledWordsGameBinding
 import com.ersurajrajput.quizapp.repo.GamesRepo
@@ -58,6 +61,12 @@ class UnscrambledWordsGameActivity : AppCompatActivity() {
         binding = ActivityUnscrambledWordsGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
         enableEdgeToEdge()
+        val windowInsetsController =
+            WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+
         gamesRepo = GamesRepo()
         setupSoundPool()
         setupKeyboard()

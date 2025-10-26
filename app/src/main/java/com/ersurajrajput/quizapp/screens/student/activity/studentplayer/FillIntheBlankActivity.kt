@@ -1,6 +1,8 @@
 package com.ersurajrajput.quizapp.screens.student.activity.studentplayer
 
 import android.app.Dialog
+import android.content.ClipData
+import android.content.ClipDescription
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -8,10 +10,11 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.DragEvent
 import android.view.Gravity
+import android.view.MotionEvent
 import android.view.View
 import android.view.Window
-import android.view.WindowManager
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -22,8 +25,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
-import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.ersurajrajput.quizapp.R
 import com.ersurajrajput.quizapp.models.FillInTheBlanksModel
 import com.ersurajrajput.quizapp.models.FillInTheBlanksQuestions
@@ -44,21 +48,20 @@ class FillIntheBlankActivity : AppCompatActivity() {
     private lateinit var endTextViews: List<TextView>
     private lateinit var answerEditTexts: List<EditText>
     private lateinit var optionTextViews: List<TextView>
-    private var optionsContainer: LinearLayout? = null // MODIFIED: Changed to nullable to prevent crash
+    private var optionsContainer: LinearLayout? = null
     private lateinit var submitButton: AppCompatButton
     private lateinit var nextButton: AppCompatButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_fill_inthe_blank)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        val windowInsetsController =
+            WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
 
         initViews()
 
@@ -72,7 +75,7 @@ class FillIntheBlankActivity : AppCompatActivity() {
         loadQuiz(activityId)
 
         submitButton.setOnClickListener { checkAnswers() }
-        nextButton.setOnClickListener { nextPage() }
+        // nextButton listener is now set dynamically in displayCurrentPage/checkAnswers
         backBtn()
     }
 
@@ -122,8 +125,37 @@ class FillIntheBlankActivity : AppCompatActivity() {
         )
 
 
-        answerEditTexts.forEach {
-            it.addTextChangedListener(object : TextWatcher {
+        // 1. Set Drag Listener for Options (The "Word Bank" TextViews)
+        optionTextViews.forEach { textView ->
+            textView.setOnTouchListener { view, motionEvent ->
+                if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                    // Create a ClipData object (to hold the text being dragged)
+                    val dragText = (view as TextView).text.toString()
+                    val item = ClipData.Item(dragText)
+                    val mimeTypes = arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)
+                    // Use the option's text as the ClipData label
+                    val dragData = ClipData(dragText, mimeTypes, item)
+
+                    // Start the drag, passing the TextView itself as the localState
+                    val shadow = View.DragShadowBuilder(view)
+                    view.startDragAndDrop(dragData, shadow, view, 0)
+
+                    // Hide the original TextView while dragging
+                    view.visibility = View.INVISIBLE
+                    true
+                } else {
+                    false
+                }
+            }
+        }
+
+        // 2. Set Drop Listener for EditTexts
+        answerEditTexts.forEach { editText ->
+            // Use a custom DragListener to handle the drop logic
+            editText.setOnDragListener(DragListener())
+
+            // Keep the TextWatcher for initial submission check (for manual input or dropped text)
+            editText.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
                 override fun afterTextChanged(s: Editable?) {
@@ -163,6 +195,8 @@ class FillIntheBlankActivity : AppCompatActivity() {
             if (index < optionTextViews.size) {
                 optionTextViews[index].text = answer
                 optionTextViews[index].visibility = View.VISIBLE
+                // Set the correct answer as a tag for identification on a failed drop
+                optionTextViews[index].tag = answer
             }
         }
 
@@ -180,13 +214,20 @@ class FillIntheBlankActivity : AppCompatActivity() {
         }
 
         submitButton.isEnabled = false
-        nextButton.isEnabled = false
+        setupSkipButton() // Set up button as Skip when page loads
+    }
 
-        val totalPages = (quiz.questions.size + questionsPerPage - 1) / questionsPerPage
-        if (currentPage >= totalPages - 1) {
-            nextButton.text = "Finish"
-        } else {
-            nextButton.text = "Next"
+    private fun setupSkipButton() {
+        val quiz = activityModel ?: return
+        val totalQuestions = quiz.questions.size
+        val totalPages = (totalQuestions + questionsPerPage - 1) / questionsPerPage
+
+        nextButton.isEnabled = true
+        nextButton.text = if (currentPage >= totalPages - 1) "Finish" else "Skip"
+
+        // Set the listener to simply advance the page
+        nextButton.setOnClickListener {
+            nextPage()
         }
     }
 
@@ -194,6 +235,7 @@ class FillIntheBlankActivity : AppCompatActivity() {
         val questionsOnPage = getCurrentPageQuestions()
         if (questionsOnPage.isEmpty()) return
 
+        // Check if all relevant EditTexts are filled
         val allFilled = answerEditTexts.take(questionsOnPage.size)
             .all { it.text.toString().trim().isNotEmpty() }
 
@@ -221,6 +263,13 @@ class FillIntheBlankActivity : AppCompatActivity() {
 
         submitButton.isEnabled = false
         nextButton.isEnabled = true
+
+        // Change Skip button to Next/Finish button after submission
+        val totalQuestions = activityModel?.questions?.size ?: 0
+        val totalPages = (totalQuestions + questionsPerPage - 1) / questionsPerPage
+
+        nextButton.text = if (currentPage >= totalPages - 1) "Finish" else "Next"
+        nextButton.setOnClickListener { nextPage() }
 
         val allCorrect = correctOnPage == questionsOnPage.size
         showResultDialogAndPlaySound(allCorrect)
@@ -310,5 +359,70 @@ class FillIntheBlankActivity : AppCompatActivity() {
         val end = minOf(start + questionsPerPage, questions.size)
         return if (start < end) questions.subList(start, end) else emptyList()
     }
-}
 
+    /**
+     * Handles the drag and drop events on the target EditText views.
+     */
+    private inner class DragListener : View.OnDragListener {
+        override fun onDrag(v: View, event: DragEvent): Boolean {
+            val editText = v as EditText
+            when (event.action) {
+                DragEvent.ACTION_DRAG_STARTED -> {
+                    // Determine if this View can accept the data
+                    return event.clipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)
+                }
+                DragEvent.ACTION_DRAG_ENTERED -> {
+                    // Indicate a drop target
+                    editText.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#ADD8E6")) // Light Blue
+                    return true
+                }
+                DragEvent.ACTION_DRAG_EXITED -> {
+                    // Restore background
+                    editText.backgroundTintList = null
+                    return true
+                }
+                DragEvent.ACTION_DROP -> {
+                    val item: ClipData.Item = event.clipData.getItemAt(0)
+                    val dragData = item.text.toString().trim()
+                    val draggedView = event.localState as? TextView
+
+                    // 1. Check if the EditText is already filled
+                    val existingText = editText.text.toString().trim()
+
+                    // 2. Set the new text
+                    editText.setText(dragData)
+
+                    // 3. Hide the new option from the word bank
+                    draggedView?.visibility = View.INVISIBLE
+
+                    // 4. If there was existing text, find the TextView it came from
+                    // and make it visible again (return it to the word bank).
+                    if (existingText.isNotEmpty()) {
+                        val returnedTextView = optionTextViews.firstOrNull {
+                            it.text.toString().trim() == existingText && it.visibility == View.INVISIBLE
+                        }
+                        returnedTextView?.visibility = View.VISIBLE
+                    }
+
+                    // 5. Restore EditText appearance
+                    editText.backgroundTintList = null
+                    return true
+                }
+                DragEvent.ACTION_DRAG_ENDED -> {
+                    val dropped = event.result
+                    val draggedView = event.localState as? TextView
+
+                    // If the drag ended without a successful drop (e.g., dropped outside an EditText)
+                    if (!dropped) {
+                        // Make the option visible again
+                        draggedView?.visibility = View.VISIBLE
+                    }
+                    // Restore EditText appearance in case of exit or end without drop
+                    editText.backgroundTintList = null
+                    return true
+                }
+                else -> return false
+            }
+        }
+    }
+}

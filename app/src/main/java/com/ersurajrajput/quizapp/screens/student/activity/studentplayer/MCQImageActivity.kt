@@ -18,6 +18,9 @@ import android.view.Gravity
 import android.widget.TextView
 import android.view.WindowManager
 import androidx.activity.enableEdgeToEdge
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 
 class MCQImageActivity : AppCompatActivity() {
 
@@ -33,7 +36,12 @@ class MCQImageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+
+        val windowInsetsController =
+            WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
 
         binding = ActivityMcqimageBinding.inflate(layoutInflater)
         setContentView(binding.root)

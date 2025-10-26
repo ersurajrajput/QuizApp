@@ -55,9 +55,6 @@ class SplashActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-//        DummyRepo().populateFillInTheBlanks()
-
-
         setContent {
             QuizAppTheme {
                 SplashScreen()

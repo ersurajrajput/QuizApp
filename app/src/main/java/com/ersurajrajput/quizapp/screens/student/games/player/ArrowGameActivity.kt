@@ -20,6 +20,9 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -68,7 +71,11 @@ class ArrowGameActivity : AppCompatActivity() {
         binding = ActivityArrowGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
         enableEdgeToEdge()
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        val windowInsetsController =
+            WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
 
         // Hide buttons as they are no longer used
         binding.btnSubmit.visibility = View.GONE
